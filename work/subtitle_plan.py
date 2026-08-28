@@ -2,7 +2,8 @@ import json
 
 WORK = "/home/user/MyVideo/work"
 words = json.load(open(f"{WORK}/edited_words.json"))
-TOTAL = 90.86
+timeline = json.load(open(f"{WORK}/timeline.json"))
+TOTAL = timeline[-1]["edited_end"]
 
 def find(text, occurrence=0):
     matches = [w for w in words if w["text"].strip("?,.") == text]

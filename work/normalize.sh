@@ -2,7 +2,7 @@
 set -e
 cd /home/user/MyVideo/work
 
-IN=composited.mp4
+IN=composited_audio.mp4
 OUT=final.mp4
 
 # pass 1: measure
