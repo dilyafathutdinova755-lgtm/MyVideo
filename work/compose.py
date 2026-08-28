@@ -20,8 +20,8 @@ font_semibold = f"{WORK}/fonts/ManropeSemiBold.ttf"
 def F(path, size):
     return ImageFont.truetype(path, size)
 
-MAIN_SIZE = 108
-SEC_SIZE = 54
+MAIN_SIZE = 92
+SEC_SIZE = 46
 LINE_SPACING = 0.90
 CAPTION_SIZE = 46
 
@@ -99,7 +99,7 @@ icon_img = icon_img.resize((ICON_W, int(ICON_W * icon_ratio)), Image.LANCZOS)
 ICON_X = W - ICON_W - 60
 ICON_Y = 300
 
-CARD_BAND_Y = int(H * 0.68)  # pushed down to clear mouth on tight face crops
+CARD_TOP_Y = 1280  # top-anchored: clears chin at worst-case zoom (see edl.py EYE_TARGET_FRAC)
 CAPTION_Y = 240
 
 def find_card(t):
@@ -170,7 +170,7 @@ def compose_frame(base_rgb, t):
                 img = img.copy()
                 img.putalpha(a)
             x = (W - img.width) // 2
-            y = CARD_BAND_Y - img.height // 2
+            y = CARD_TOP_Y
             frame.alpha_composite(img, (x, y))
 
     # icon layer

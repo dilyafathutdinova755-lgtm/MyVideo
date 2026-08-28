@@ -25,10 +25,13 @@ CLIPS = [
     ("S11b",157.88, 165.58, 1.27),
 ]
 
+EYE_TARGET_FRAC = 0.33  # lowered from 0.42: at zoom>=1.2 that pushed mouth/chin
+                          # down into the subtitle-card band (user-reported overlap)
+
 def crop_rect(zoom):
     h = W_SRC_H = H / zoom
     w = W / zoom
-    y0 = max(0, EYE_Y - 0.42 * h)
+    y0 = max(0, EYE_Y - EYE_TARGET_FRAC * h)
     x0 = (W - w) / 2
     # even dims for encoder
     w = int(w // 2 * 2)
