@@ -5,6 +5,8 @@ work/cut.mp4
 work/composited.mp4
 work/composited_audio.mp4
 work/final.mp4
+work/final_compressed*.mp4
+work/EGE_video_final.mp4
 work/*.jpg
 work/audio/*.wav
 work/__pycache__/
