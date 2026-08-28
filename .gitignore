@@ -1,0 +1,11 @@
+work/src/
+work/models/
+work/clips/
+work/cut.mp4
+work/composited.mp4
+work/final.mp4
+work/*.jpg
+work/audio/*.wav
+work/__pycache__/
+work/concat_list.txt
+
