@@ -26,3 +26,16 @@ work2/audio/*.wav
 work2/__pycache__/
 work2/concat_list.txt
 
+
+work3/src/
+work3/fonts/
+work3/clips/
+work3/cut.mp4
+work3/cut_1x.mp4
+work3/composited.mp4
+work3/composited_audio.mp4
+work3/*.jpg
+work3/audio/*.wav
+work3/__pycache__/
+work3/concat_list.txt
+work3/final.mp4

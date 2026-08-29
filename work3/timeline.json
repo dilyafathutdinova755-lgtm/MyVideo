@@ -1,0 +1,65 @@
+[
+ {
+  "label": "R1",
+  "in": 5.5,
+  "out": 14.3,
+  "zoom": 1.0,
+  "edited_start": 0.0,
+  "edited_end": 7.3333,
+  "dur": 7.3333
+ },
+ {
+  "label": "R2",
+  "in": 23.466667,
+  "out": 30.9,
+  "zoom": 1.0,
+  "edited_start": 7.3333,
+  "edited_end": 13.5277,
+  "dur": 6.1944
+ },
+ {
+  "label": "R3a",
+  "in": 34.833333,
+  "out": 50.766667,
+  "zoom": 1.0,
+  "edited_start": 13.5277,
+  "edited_end": 26.8055,
+  "dur": 13.2777
+ },
+ {
+  "label": "R3b",
+  "in": 50.8,
+  "out": 69.433333,
+  "zoom": 1.0,
+  "edited_start": 26.8055,
+  "edited_end": 42.3332,
+  "dur": 15.5277
+ },
+ {
+  "label": "R4",
+  "in": 97.866667,
+  "out": 116.133333,
+  "zoom": 1.0,
+  "edited_start": 42.3332,
+  "edited_end": 57.5553,
+  "dur": 15.2222
+ },
+ {
+  "label": "R5",
+  "in": 118.5,
+  "out": 133.9,
+  "zoom": 1.0,
+  "edited_start": 57.5553,
+  "edited_end": 70.3886,
+  "dur": 12.8333
+ },
+ {
+  "label": "R6",
+  "in": 142.1,
+  "out": 145.833333,
+  "zoom": 1.0,
+  "edited_start": 70.3886,
+  "edited_end": 73.5,
+  "dur": 3.1111
+ }
+]
