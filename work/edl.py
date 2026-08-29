@@ -25,29 +25,22 @@ CLIPS = [
     ("S11b",157.88, 165.58, 1.27),
 ]
 
-EYE_TARGET_FRAC = 0.33  # lowered from 0.42: at zoom>=1.2 that pushed mouth/chin
-                          # down into the subtitle-card band (user-reported overlap)
+SPEED = 1.2  # user requested: always play back at 1.2x
 
 def crop_rect(zoom):
-    h = W_SRC_H = H / zoom
-    w = W / zoom
-    y0 = max(0, EYE_Y - EYE_TARGET_FRAC * h)
-    x0 = (W - w) / 2
-    # even dims for encoder
-    w = int(w // 2 * 2)
-    h = int(h // 2 * 2)
-    x0 = int(x0 // 2 * 2)
-    y0 = int(y0 // 2 * 2)
-    return x0, y0, w, h
+    # zoom removed per user request: no per-clip crop variation, use the
+    # full source frame (already exactly 9:16) scaled straight to 1080x1920.
+    return 0, 0, W, H
 
 def build_edited_timeline():
     t = 0.0
     out = []
     for label, iin, iout, zoom in CLIPS:
-        dur = iout - iin
+        src_dur = iout - iin
+        dur = src_dur / SPEED
         out.append({
             "label": label, "in": iin, "out": iout, "zoom": zoom,
-            "edited_start": t, "edited_end": t + dur, "dur": dur,
+            "edited_start": t, "edited_end": t + dur, "dur": dur, "src_dur": src_dur,
         })
         t += dur
     return out

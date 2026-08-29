@@ -6,28 +6,20 @@ os.chdir(WORK)
 os.makedirs("clips", exist_ok=True)
 
 timeline = json.load(open("timeline.json"))
-
-def crop_rect(zoom, W=2160, H=3840, EYE_Y=1344):
-    h = H / zoom
-    w = W / zoom
-    y0 = max(0, EYE_Y - 0.42 * h)
-    x0 = (W - w) / 2
-    w = int(w // 2 * 2)
-    h = int(h // 2 * 2)
-    x0 = int(x0 // 2 * 2)
-    y0 = int(y0 // 2 * 2)
-    return x0, y0, w, h
+SPEED = 1.2  # keep in sync with edl.py
 
 listfile = []
 for i, c in enumerate(timeline):
-    x0, y0, w, h = crop_rect(c["zoom"])
-    dur = c["out"] - c["in"]
+    src_dur = c["out"] - c["in"]
     out_path = f"clips/{i:02d}_{c['label']}.mp4"
-    vf = f"crop={w}:{h}:{x0}:{y0},scale=1080:1920,fps=30,setsar=1"
+    # no crop/zoom: full 2160x3840 source (already 9:16) straight to 1080x1920.
+    # speed up 1.2x: setpts compresses video, atempo compresses audio (pitch-preserving).
+    vf = f"scale=1080:1920,fps=30,setsar=1,setpts=PTS/{SPEED}"
+    af = f"atempo={SPEED}"
     cmd = [
         "ffmpeg", "-y", "-ss", f"{c['in']:.3f}", "-i", SRC,
-        "-t", f"{dur:.3f}",
-        "-vf", vf,
+        "-t", f"{src_dur:.3f}",
+        "-vf", vf, "-af", af,
         "-c:v", "libx264", "-preset", "medium", "-crf", "16", "-pix_fmt", "yuv420p",
         "-c:a", "pcm_s16le", "-ar", "48000", "-ac", "2",
         out_path,
