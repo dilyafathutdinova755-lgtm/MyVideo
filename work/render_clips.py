@@ -17,8 +17,11 @@ for i, c in enumerate(timeline):
     vf = f"scale=1080:1920,fps=30,setsar=1,setpts=PTS/{SPEED}"
     af = f"atempo={SPEED}"
     cmd = [
-        "ffmpeg", "-y", "-ss", f"{c['in']:.3f}", "-i", SRC,
-        "-t", f"{src_dur:.3f}",
+        # -ss/-t BEFORE -i: trims exactly src_dur seconds of *source* content.
+        # setpts/atempo then shrink that fixed amount of content to src_dur/SPEED
+        # of output time. -t placed after -i would instead be an output-time cap
+        # that competes with setpts and makes ffmpeg over-read source to fill it.
+        "ffmpeg", "-y", "-ss", f"{c['in']:.3f}", "-t", f"{src_dur:.3f}", "-i", SRC,
         "-vf", vf, "-af", af,
         "-c:v", "libx264", "-preset", "medium", "-crf", "16", "-pix_fmt", "yuv420p",
         "-c:a", "pcm_s16le", "-ar", "48000", "-ac", "2",
