@@ -6,23 +6,18 @@ os.chdir(WORK)
 os.makedirs("clips", exist_ok=True)
 
 timeline = json.load(open("timeline.json"))
-SPEED = 1.2  # keep in sync with edl.py
 
 listfile = []
 for i, c in enumerate(timeline):
     src_dur = c["out"] - c["in"]
     out_path = f"clips/{i:02d}_{c['label']}.mp4"
     # no crop/zoom: full 2160x3840 source (already 9:16) straight to 1080x1920.
-    # speed up 1.2x: setpts compresses video, atempo compresses audio (pitch-preserving).
-    vf = f"scale=1080:1920,fps=30,setsar=1,setpts=PTS/{SPEED}"
-    af = f"atempo={SPEED}"
+    # Rendered at ORIGINAL (1x) speed -- the global 1.2x speed-up is applied once,
+    # after concat, in speed_up.py (see edl.py for why: avoids per-clip A/V drift).
+    vf = "scale=1080:1920,fps=30,setsar=1"
     cmd = [
-        # -ss/-t BEFORE -i: trims exactly src_dur seconds of *source* content.
-        # setpts/atempo then shrink that fixed amount of content to src_dur/SPEED
-        # of output time. -t placed after -i would instead be an output-time cap
-        # that competes with setpts and makes ffmpeg over-read source to fill it.
         "ffmpeg", "-y", "-ss", f"{c['in']:.3f}", "-t", f"{src_dur:.3f}", "-i", SRC,
-        "-vf", vf, "-af", af,
+        "-vf", vf,
         "-c:v", "libx264", "-preset", "medium", "-crf", "16", "-pix_fmt", "yuv420p",
         "-c:a", "pcm_s16le", "-ar", "48000", "-ac", "2",
         out_path,

@@ -33,14 +33,18 @@ def crop_rect(zoom):
     return 0, 0, W, H
 
 def build_edited_timeline():
+    # 1x (pre-speedup) timeline. The 1.2x speed change is applied once, globally,
+    # to the whole assembled cut (see speed_up.py) -- not per-clip -- so the
+    # per-clip frame-rounding of setpts/atempo can't accumulate into A/V drift
+    # across 16 concatenated clips. rescale_timeline.py scales this 1x timeline
+    # to the final sped-up one after measuring the real output duration.
     t = 0.0
     out = []
     for label, iin, iout, zoom in CLIPS:
-        src_dur = iout - iin
-        dur = src_dur / SPEED
+        dur = iout - iin
         out.append({
             "label": label, "in": iin, "out": iout, "zoom": zoom,
-            "edited_start": t, "edited_end": t + dur, "dur": dur, "src_dur": src_dur,
+            "edited_start": t, "edited_end": t + dur, "dur": dur,
         })
         t += dur
     return out
