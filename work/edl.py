@@ -26,6 +26,18 @@ CLIPS = [
 ]
 
 SPEED = 1.2  # user requested: always play back at 1.2x
+SRC_FPS = 30  # source is native 30fps
+
+def snap(t):
+    # Snap a cut point to the nearest video frame boundary (multiple of
+    # 1/SRC_FPS s). At 30fps that's also a whole number of 48kHz audio
+    # samples (48000/30=1600), so video and audio trimmed to snapped in/out
+    # points land on EXACTLY the same duration -- no rounding drift to
+    # accumulate across 16 concatenated clips. Unsnapped cut points (e.g.
+    # in=0.72) are not frame-aligned, so video (quantized to whole frames)
+    # and audio (sample-accurate) silently diverge by up to ~1 frame per
+    # clip; that's what caused the lip-sync drift the user reported.
+    return round(round(t * SRC_FPS) / SRC_FPS, 6)
 
 def crop_rect(zoom):
     # zoom removed per user request: no per-clip crop variation, use the
@@ -41,6 +53,7 @@ def build_edited_timeline():
     t = 0.0
     out = []
     for label, iin, iout, zoom in CLIPS:
+        iin, iout = snap(iin), snap(iout)
         dur = iout - iin
         out.append({
             "label": label, "in": iin, "out": iout, "zoom": zoom,

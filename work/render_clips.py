@@ -20,6 +20,11 @@ for i, c in enumerate(timeline):
         "-vf", vf,
         "-c:v", "libx264", "-preset", "medium", "-crf", "16", "-pix_fmt", "yuv420p",
         "-c:a", "pcm_s16le", "-ar", "48000", "-ac", "2",
+        # re-clamp duration on output: the 30fps video stream rounds its trimmed
+        # length UP to the next whole frame while audio (sample-accurate) lands
+        # exactly on src_dur; without this the mismatch compounds across all 16
+        # clips into audible lip-sync drift after concat + speed-up.
+        "-t", f"{src_dur:.3f}",
         out_path,
     ]
     print(" ".join(cmd))
