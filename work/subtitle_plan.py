@@ -36,6 +36,16 @@ for start, parts, dur in raw_cards:
     end = round(min(TOTAL, start + dur), 2)
     cards.append({"start": start, "end": end, "parts": parts})
 
+# 1.2x speed pulls words (and their anchored cards) closer together than the
+# original hold durations assumed -- clamp overlaps by shrinking the earlier
+# card's tail, never pushing a card's start off its anchoring word.
+MIN_GAP = 0.08
+MIN_HOLD = 1.0
+for a, b in zip(cards, cards[1:]):
+    latest_end = b["start"] - MIN_GAP
+    if a["end"] > latest_end:
+        a["end"] = round(max(latest_end, a["start"] + MIN_HOLD), 2)
+
 # icon + CTA appear together from first app mention to the end
 icon_start = round(find("тренажер")["start"] - 0.5, 2)
 icon = {"start": icon_start, "end": TOTAL}
