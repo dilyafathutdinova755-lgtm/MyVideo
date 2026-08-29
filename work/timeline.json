@@ -1,146 +1,146 @@
 [
  {
   "label": "S1",
-  "in": 0.72,
-  "out": 7.34,
+  "in": 0.733333,
+  "out": 7.333333,
   "zoom": 1.08,
   "edited_start": 0.0,
-  "edited_end": 6.62,
-  "dur": 6.62
+  "edited_end": 5.5005,
+  "dur": 5.5005
  },
  {
   "label": "S2",
-  "in": 17.68,
-  "out": 24.38,
+  "in": 17.666667,
+  "out": 24.366667,
   "zoom": 1.16,
-  "edited_start": 6.62,
-  "edited_end": 13.32,
-  "dur": 6.699999999999999
+  "edited_start": 5.5005,
+  "edited_end": 11.0843,
+  "dur": 5.5838
  },
  {
   "label": "S3",
-  "in": 26.48,
+  "in": 26.466667,
   "out": 32.5,
   "zoom": 1.24,
-  "edited_start": 13.32,
-  "edited_end": 19.34,
-  "dur": 6.02
+  "edited_start": 11.0843,
+  "edited_end": 16.1126,
+  "dur": 5.0282
  },
  {
   "label": "S4",
   "in": 34.8,
   "out": 41.7,
   "zoom": 1.12,
-  "edited_start": 19.34,
-  "edited_end": 26.240000000000006,
-  "dur": 6.900000000000006
+  "edited_start": 16.1126,
+  "edited_end": 21.8631,
+  "dur": 5.7505
  },
  {
   "label": "S5a",
   "in": 43.0,
-  "out": 51.04,
+  "out": 51.033333,
   "zoom": 1.2,
-  "edited_start": 26.240000000000006,
-  "edited_end": 34.28,
-  "dur": 8.04
+  "edited_start": 21.8631,
+  "edited_end": 28.5582,
+  "dur": 6.6951
  },
  {
   "label": "S5b",
-  "in": 51.16,
-  "out": 53.26,
+  "in": 51.166667,
+  "out": 53.266667,
   "zoom": 1.1,
-  "edited_start": 34.28,
-  "edited_end": 36.38,
-  "dur": 2.1000000000000014
+  "edited_start": 28.5582,
+  "edited_end": 30.3083,
+  "dur": 1.7502
  },
  {
   "label": "S6",
-  "in": 55.36,
-  "out": 61.78,
+  "in": 55.366667,
+  "out": 61.766667,
   "zoom": 1.18,
-  "edited_start": 36.38,
-  "edited_end": 42.800000000000004,
-  "dur": 6.420000000000002
+  "edited_start": 30.3083,
+  "edited_end": 35.6422,
+  "dur": 5.3338
  },
  {
   "label": "S7",
-  "in": 63.56,
-  "out": 68.38,
+  "in": 63.566667,
+  "out": 68.366667,
   "zoom": 1.26,
-  "edited_start": 42.800000000000004,
-  "edited_end": 47.62,
-  "dur": 4.819999999999993
+  "edited_start": 35.6422,
+  "edited_end": 39.6425,
+  "dur": 4.0004
  },
  {
   "label": "S8a",
   "in": 90.2,
-  "out": 95.72,
+  "out": 95.733333,
   "zoom": 1.14,
-  "edited_start": 47.62,
-  "edited_end": 53.13999999999999,
-  "dur": 5.519999999999996
+  "edited_start": 39.6425,
+  "edited_end": 44.2541,
+  "dur": 4.6115
  },
  {
   "label": "S8b",
-  "in": 95.88,
+  "in": 95.866667,
   "out": 102.1,
   "zoom": 1.22,
-  "edited_start": 53.13999999999999,
-  "edited_end": 59.35999999999999,
-  "dur": 6.219999999999999
+  "edited_start": 44.2541,
+  "edited_end": 49.449,
+  "dur": 5.1949
  },
  {
   "label": "S9a",
-  "in": 126.24,
-  "out": 127.09,
+  "in": 126.233333,
+  "out": 127.1,
   "zoom": 1.17,
-  "edited_start": 59.35999999999999,
-  "edited_end": 60.21,
-  "dur": 0.8500000000000085
+  "edited_start": 49.449,
+  "edited_end": 50.1713,
+  "dur": 0.7223
  },
  {
   "label": "S9b",
-  "in": 128.84,
-  "out": 135.26,
+  "in": 128.833333,
+  "out": 135.266667,
   "zoom": 1.17,
-  "edited_start": 60.21,
-  "edited_end": 66.63,
-  "dur": 6.4199999999999875
+  "edited_start": 50.1713,
+  "edited_end": 55.5329,
+  "dur": 5.3616
  },
  {
   "label": "S10a",
-  "in": 138.08,
-  "out": 144.76,
+  "in": 138.066667,
+  "out": 144.766667,
   "zoom": 1.25,
-  "edited_start": 66.63,
-  "edited_end": 73.30999999999997,
-  "dur": 6.679999999999978
+  "edited_start": 55.5329,
+  "edited_end": 61.1167,
+  "dur": 5.5838
  },
  {
   "label": "S10b",
-  "in": 144.88,
+  "in": 144.866667,
   "out": 150.5,
   "zoom": 1.11,
-  "edited_start": 73.30999999999997,
-  "edited_end": 78.92999999999998,
-  "dur": 5.6200000000000045
+  "edited_start": 61.1167,
+  "edited_end": 65.8116,
+  "dur": 4.6949
  },
  {
   "label": "S11a",
-  "in": 153.08,
-  "out": 157.36,
+  "in": 153.066667,
+  "out": 157.366667,
   "zoom": 1.19,
-  "edited_start": 78.92999999999998,
-  "edited_end": 83.20999999999998,
-  "dur": 4.280000000000001
+  "edited_start": 65.8116,
+  "edited_end": 69.3952,
+  "dur": 3.5837
  },
  {
   "label": "S11b",
-  "in": 157.88,
-  "out": 165.58,
+  "in": 157.866667,
+  "out": 165.566667,
   "zoom": 1.27,
-  "edited_start": 83.20999999999998,
-  "edited_end": 90.91,
-  "dur": 7.700000000000017
+  "edited_start": 69.3952,
+  "edited_end": 75.8128,
+  "dur": 6.4173
  }
 ]
