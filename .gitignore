@@ -1,0 +1,4 @@
+# исходники и рендеры не коммитим — тяжёлые
+projects/*/source.*
+projects/*/out/
+projects/*/stills/
