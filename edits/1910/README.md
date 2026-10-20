@@ -13,3 +13,8 @@ python3 sfx.py && ./build.sh out.mp4
 - `build.sh` — наложение, микс, двухпроходный loudnorm к −14 LUFS / TP −1.4.
 
 Расшифровка — Whisper medium (sherpa-onnx, модель из GitHub-релиза: Hugging Face закрыт сетевой политикой), тайминги слов — по провалам громкости + распределение по слогам.
+
+## Версия по плейбуку (`pb.py`, `build_pb.sh`)
+
+Собрана только по «Плейбуку динамичного монтажа в пастельной палитре», без опоры на остальные материалы репозитория.
+Нужны шрифты в `fonts/`: Manrope, Unbounded, Oswald, CormorantGaramond-Italic (google/fonts). Сборка: `./build_pb.sh out.mp4`. Звук исходника копируется без обработки.
