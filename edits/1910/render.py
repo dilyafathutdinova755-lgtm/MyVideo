@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Графический слой для ролика «ответы вверх ногами» (исходник 1080x1920, 25fps, 14.98с).
 
-Видеоряд не режется и не кадрируется: всё ниже — оверлей поверх исходника.
-Выход: сырые RGBA-кадры в stdout (ffmpeg накладывает их на видео).
-Кадры: python3 render.py --png 4.0 6.9 ... пишет стоп-кадры в qa/.
+Видеоряд не режется: поверх него плавные зумы (ZOOM_KEYS) и графика.
+Поток: исходные кадры rgb24 в stdin -> готовые кадры rgb24 в stdout.
+Кадры: python3 render.py --png <папка> 4.0 6.9 ... пишет стоп-кадры в qa/.
 """
 import math, sys, os
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
@@ -144,32 +144,6 @@ def txt_of(o, img): return f"card line too wide: {img.width}"
 
 
 # ===================== ГРАФИКА =====================
-def bubble(lines, t0, t1, cx, cy):
-    """M11: молочное облачко, тёмный текст, хвост к лицу (влево)."""
-    fs = [(golos(sz), sz, col) for _, sz, col in lines]
-    ws = [f.getbbox(t, anchor="ls")[2] for (t, _, _), (f, _, _) in zip(lines, fs)]
-    bw = max(ws) + 48
-    bh = int(sum(sz * 0.9 for _, sz, _ in lines) + 54)
-    pad = 40
-    img = Image.new("RGBA", (bw + 2 * pad + 40, bh + 2 * pad + 30), (0, 0, 0, 0))
-    x0, y0 = pad + 40, pad
-    shape = Image.new("L", img.size, 0); d = ImageDraw.Draw(shape)
-    d.rounded_rectangle((x0, y0, x0 + bw, y0 + bh), 34, fill=255)
-    d.polygon([(x0 + 10, y0 + bh - 46), (x0 - 34, y0 + bh + 18), (x0 + 58, y0 + bh - 8)], fill=255)
-    sh = shape.filter(ImageFilter.GaussianBlur(16)).point(lambda v: int(v * 0.30))
-    img.paste(Image.new("RGBA", img.size, (0x24, 0x21, 0x2B, 255)), (0, 10), sh)
-    img.paste(Image.new("RGBA", img.size, (255, 255, 255, 255)), (0, 0), shape)
-    d = ImageDraw.Draw(img)
-    y = y0 + 28
-    for (t, sz, col), (f, _, _) in zip(lines, fs):
-        y += sz * 0.9 if y > y0 + 28 else sz * 0.72
-        d.text((x0 + bw / 2, y), t, font=f, fill=col + (255,), anchor="ms")
-    # правый край облачка — в action-safe (поле 54px)
-    cx = min(cx, W - 54 - (x0 + bw) + img.width / 2)
-    body_left = cx - img.width / 2 + x0          # хвост (ещё 34px левее) указывает на лицо, но не заходит на него
-    assert body_left >= 600, f"bubble reaches face: {body_left}"
-    return El(img, cx, cy, t0, t1, "bubble", fade_in=0.08, fade_out=0.09)
-
 def arrow_img(length, horizontal=True, prog=1.0, width=8, color=ACCENT):
     """M10: стрелка, прорисовка по длине (prog 0..1). Возвращает картинку и центр."""
     pad = 30
@@ -208,34 +182,225 @@ class Arrow(El):
         self.img = self.cache[p]
         return st
 
-class Steps(El):
-    """M09: шкала из сегментов, заполнение слева направо. Без чисел — процесс, а не данные."""
-    def __init__(self, n, cx, cy, t0, t1, fill_t0, fill_dur):
-        super().__init__(None, cx, cy, t0, t1, "rise")
-        self.n, self.f0, self.fd = n, fill_t0, fill_dur
-        self.sw, self.sh, self.gap = 96, 22, 16
+def ease_in_out(p): return 0.5 - 0.5 * math.cos(math.pi * clamp(p))
+
+class Item(El):
+    """M07: предметная вставка — 0.9 -> 1, +40px снизу, 280ms; выход 140ms с уменьшением."""
+    def __init__(self, img, cx, cy, t0, t1, tilt=0.0, z=5):
+        super().__init__(img, cx, cy, t0, t1, "item", rot=tilt, z=z, fade_in=0.12, fade_out=0.14)
     def state(self, t):
         st = super().state(t)
         if st is None: return None
-        pad = 24
-        w = self.n * self.sw + (self.n - 1) * self.gap + 2 * pad; h = self.sh + 2 * pad
+        _, a, _, rot = st
+        p = clamp((t - self.t0) / 0.28)
+        s = 0.90 + 0.10 * ease_out_back(p, 0.8)
+        dy = 40 * (1 - ease_out_cubic(p))
+        s *= 1 - 0.06 * (1 - clamp((self.t1 - t) / 0.14))
+        return s, a, dy, rot
+
+def shadowed(shape_img, blur=18, alpha=0.30, dy=10):
+    """Мягкая сливовая тень под непрозрачной формой (CLAUDE.md §5.2 / плейбук §3.4)."""
+    w, h = shape_img.size
+    out = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    sh = shape_img.getchannel("A").filter(ImageFilter.GaussianBlur(blur)).point(lambda v: int(v * alpha))
+    out.paste(Image.new("RGBA", (w, h), (0x24, 0x21, 0x2B, 255)), (0, dy), sh)
+    out.alpha_composite(shape_img)
+    return out
+
+def answer_sheet():
+    """Иллюстрация: страница ответов из сборника. Строки абстрактные — без выдуманных цифр."""
+    pw, ph, pad = 250, 310, 40
+    img = Image.new("RGBA", (pw + 2 * pad, ph + 2 * pad), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    x0, y0 = pad, pad
+    d.rounded_rectangle((x0, y0, x0 + pw, y0 + ph), 22, fill=(255, 255, 255, 255))
+    d.rounded_rectangle((x0, y0, x0 + pw, y0 + 62), 22, fill=ACCENT + (255,))
+    d.rectangle((x0, y0 + 40, x0 + pw, y0 + 62), fill=ACCENT + (255,))
+    d.text((x0 + pw / 2, y0 + 45), "ОТВЕТЫ", font=golos(30), fill=INK + (255,), anchor="ms")
+    for i, wl in enumerate((150, 110, 170, 90, 135)):
+        y = y0 + 92 + i * 42
+        d.ellipse((x0 + 26, y, x0 + 44, y + 18), fill=(0x5E, 0x58, 0x6B, 255))
+        d.rounded_rectangle((x0 + 60, y + 3, x0 + 60 + wl, y + 15), 6, fill=(0xD9, 0xD6, 0xDE, 255))
+    return shadowed(img)
+
+class Sheet(Item):
+    """Лист ответов: входит, затем переворачивается вверх ногами (ease in-out, 450ms)."""
+    def __init__(self, cx, cy, t0, t1, flip_t, tilt=4.0):
+        super().__init__(answer_sheet(), cx, cy, t0, t1, tilt=tilt, z=6)
+        self.flip_t = flip_t
+    def state(self, t):
+        st = super().state(t)
+        if st is None: return None
+        s, a, dy, rot = st
+        return s, a, dy, rot + 180 * ease_in_out((t - self.flip_t) / 0.45)
+
+class Eyes(El):
+    """Глаза выглядывают из-за листа (слой ниже листа) и косятся: вниз на лист -> в сторону -> вниз."""
+    def __init__(self, cx, cy, t0, t1, z=5):
+        super().__init__(None, cx, cy, t0, t1, "none", z=z, fade_in=0.0, fade_out=0.14)
+    def state(self, t):
+        st = super().state(t)
+        if st is None: return None
+        lt = t - self.t0
+        rise = ease_out_back(clamp(lt / 0.32), 1.2)
+        # направление зрачков (dx, dy) по ключам
+        keys = [(0.0, (0, 10)), (0.55, (0, 10)), (0.75, (-12, 2)), (1.05, (-12, 2)), (1.25, (0, 10))]
+        dx, dyp = keys[-1][1]
+        for (ta, va), (tb, vb) in zip(keys, keys[1:]):
+            if ta <= lt < tb:
+                p = ease_in_out((lt - ta) / (tb - ta))
+                dx, dyp = va[0] + (vb[0] - va[0]) * p, va[1] + (vb[1] - va[1]) * p
+        # моргание в середине
+        blink = 1.0 - 0.85 * max(0.0, 1 - abs(lt - 0.95) / 0.06)
+        w, h = 210, 130
+        img = Image.new("RGBA", (w, h), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
+        for ex in (60, 150):
+            ey, rx, ry = 66, 38, 44 * blink
+            d.ellipse((ex - rx, ey - ry, ex + rx, ey + ry), fill=(255, 255, 255, 255), outline=INK + (255,), width=6)
+            if blink > 0.4:
+                d.ellipse((ex + dx - 15, ey + dyp - 15, ex + dx + 15, ey + dyp + 15), fill=INK + (255,))
+                d.ellipse((ex + dx - 8, ey + dyp - 10, ex + dx - 2, ey + dyp - 4), fill=(255, 255, 255, 255))
+        img = img.resize((round(w * 1.25), round(h * 1.25)), Image.BICUBIC)
+        self.img = shadowed(img, blur=8, alpha=0.35, dy=4)
+        return 1.0, st[1], 120 * (1 - rise), 0.0
+
+class WriteLines(El):
+    """«Текстовый разбор»: строки текста дописываются одна за другой (абстрактные полосы)."""
+    def __init__(self, cx, cy, t0, t1, widths=(520, 420, 470), per=0.24):
+        super().__init__(None, cx, cy, t0, t1, "none", fade_in=0.0)
+        self.widths, self.per = widths, per
+    def state(self, t):
+        st = super().state(t)
+        if st is None: return None
+        pad, lh, gap = 24, 14, 22
+        w = max(self.widths) + 2 * pad + 40; h = len(self.widths) * (lh + gap) + 2 * pad
+        shape = Image.new("RGBA", (w, h), (0, 0, 0, 0)); d = ImageDraw.Draw(shape)
+        for i, wl in enumerate(self.widths):
+            p = ease_out_cubic(clamp((t - self.t0 - i * self.per) / self.per))
+            if p <= 0: continue
+            y = pad + i * (lh + gap); x = pad + 20
+            d.ellipse((pad - 4, y - 1, pad + 12, y + 15), fill=ACCENT + (255,))
+            d.rounded_rectangle((x, y, x + max(lh, wl * p), y + lh), 7, fill=(255, 255, 255, 235))
+        sh = shape.getchannel("A").filter(ImageFilter.GaussianBlur(6)).point(lambda v: int(v * 0.5))
         img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-        sh = Image.new("L", (w, h), 0); ds = ImageDraw.Draw(sh)
-        d = ImageDraw.Draw(img)
-        for i in range(self.n):
-            x = pad + i * (self.sw + self.gap)
-            ds.rounded_rectangle((x, pad, x + self.sw, pad + self.sh), 11, fill=255)
-        sh = sh.filter(ImageFilter.GaussianBlur(7)).point(lambda v: int(v * 0.45))
         img.paste(Image.new("RGBA", (w, h), (0, 0, 0, 255)), (0, 3), sh)
-        for i in range(self.n):
-            x = pad + i * (self.sw + self.gap)
-            box = (x, pad, x + self.sw, pad + self.sh)
-            d.rounded_rectangle(box, 11, outline=(255, 255, 255, 230), width=3)
-            p = clamp((t - self.f0 - i * self.fd / self.n) / (self.fd / self.n))
-            if p > 0:
-                d.rounded_rectangle((x, pad, x + max(22, self.sw * ease_out_cubic(p)), pad + self.sh), 11, fill=ACCENT + (255,))
+        img.alpha_composite(shape)
         self.img = img
         return st
+
+def padlock(open_p):
+    """Замок: open_p 0 — закрыт, 1 — дужка поднята и повёрнута."""
+    w, h = 90, 110
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
+    lift = 14 * open_p
+    d.arc((24, 12 - lift, 66, 58 - lift), 180, 360, fill=WHITE + (255,), width=8)
+    d.line((28 - 0.5, 35 - lift, 28 - 0.5, 52 - lift * (1 - open_p)), fill=WHITE + (255,), width=8)
+    d.line((62, 35 - lift, 62, 52 - lift), fill=WHITE + (255,), width=8)
+    d.rounded_rectangle((14, 50, 76, 100), 12, fill=ACCENT + (255,))
+    d.ellipse((39, 64, 51, 76), fill=INK + (255,)); d.rectangle((43, 72, 47, 86), fill=INK + (255,))
+    return img
+
+class LockSteps(El):
+    """M09 + замок: путь из сегментов заполняется, и только в конце открывается ответ."""
+    def __init__(self, n, cx, cy, t0, t1, fill_t0, fill_dur):
+        super().__init__(None, cx, cy, t0, t1, "rise")
+        self.n, self.f0, self.fd = n, fill_t0, fill_dur
+        self.sw, self.sh, self.gap = 104, 22, 16
+        self.unlock_t = fill_t0 + fill_dur
+    def state(self, t):
+        st = super().state(t)
+        if st is None: return None
+        pad, lw = 24, 90
+        w = self.n * (self.sw + self.gap) + lw + 2 * pad; h = 110 + 2 * pad
+        shape = Image.new("RGBA", (w, h), (0, 0, 0, 0)); d = ImageDraw.Draw(shape)
+        yb = pad + 60
+        for i in range(self.n):
+            x = pad + i * (self.sw + self.gap)
+            d.rounded_rectangle((x, yb, x + self.sw, yb + self.sh), 11, outline=(255, 255, 255, 230), width=3)
+            p = clamp((t - self.f0 - i * self.fd / self.n) / (self.fd / self.n))
+            if p > 0:
+                d.rounded_rectangle((x, yb, x + max(22, self.sw * ease_out_cubic(p)), yb + self.sh), 11, fill=ACCENT + (255,))
+        op = ease_out_back(clamp((t - self.unlock_t) / 0.3), 1.2)
+        lk = padlock(clamp(op, 0, 1.2))
+        k = 1 + 0.12 * math.sin(math.pi * clamp((t - self.unlock_t) / 0.3))
+        lk = lk.resize((round(lk.width * k), round(lk.height * k)), Image.BICUBIC)
+        lx = pad + self.n * (self.sw + self.gap) + lw / 2
+        shape.alpha_composite(lk, (round(lx - lk.width / 2), round(yb + self.sh / 2 - lk.height * 0.62)))
+        sh = shape.getchannel("A").filter(ImageFilter.GaussianBlur(7)).point(lambda v: int(v * 0.45))
+        img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+        img.paste(Image.new("RGBA", (w, h), (0, 0, 0, 255)), (0, 3), sh)
+        img.alpha_composite(shape)
+        self.img = img
+        return st
+
+def link_icon():
+    """Иконка ссылки (два звена) для CTA."""
+    w = h = 150                      # запас под поворот на 45° без обрезки углов
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    for off in (-25, 25):
+        box = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+        ImageDraw.Draw(box).rounded_rectangle((w / 2 - 36 + off, h / 2 - 18, w / 2 + 36 + off, h / 2 + 18), 18,
+                                               outline=ACCENT + (255,), width=10)
+        img.alpha_composite(box)
+    img = img.rotate(-45, resample=Image.BICUBIC)
+    out = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    sh = img.getchannel("A").filter(ImageFilter.GaussianBlur(6)).point(lambda v: int(v * 0.6))
+    out.paste(Image.new("RGBA", (w, h), (0, 0, 0, 255)), (0, 3), sh)
+    out.alpha_composite(img)
+    return out
+
+class Bob(El):
+    """Обёртка: после входа элемент мягко покачивается по вертикали (луп — linear-синус, 6px)."""
+    def __init__(self, inner, start, amp=6, period=1.1):
+        super().__init__(None, inner.cx, inner.cy, inner.t0, inner.t1, "none", z=inner.z)
+        self.inner, self.start, self.amp, self.period = inner, start, amp, period
+    def state(self, t):
+        st = self.inner.state(t)
+        if st is None: return None
+        self.img = self.inner.img
+        s, a, dy, rot = st
+        if t > self.start:
+            dy += -self.amp * math.sin(2 * math.pi * (t - self.start) / self.period)
+        return s, a, dy, rot
+
+
+# ===================== ЗУМ ВИДЕОРЯДА =====================
+# Плавные наезды/отъезды на смысловых границах (CLAUDE.md §2.2: 1.06-1.28x). Исходник 1080p,
+# поэтому потолок 1.16 — дальше апскейл заметно мылит. Якорь — лицо, оно остаётся на месте.
+ZOOM_ANCHOR = (380, 700)
+ZOOM_KEYS = [  # (время, масштаб, кривая сегмента, который заканчивается в этой точке)
+    (0.00, 1.00, None),
+    (1.55, 1.04, "lin"),
+    (2.05, 1.12, "ease"),   # «ОТВЕТЫ ВВЕРХ НОГАМИ» — наезд
+    (3.55, 1.15, "lin"),
+    (4.05, 1.03, "ease"),   # глаза из-за листа — отъезд, освобождаем место справа
+    (5.15, 1.05, "lin"),
+    (6.55, 1.16, "ease"),   # «здесь подглядывать некуда» — медленный наезд в тишине
+    (7.00, 1.00, "ease"),   # «путь → ответ» — общий план
+    (8.10, 1.02, "lin"),
+    (8.60, 1.10, "ease"),   # «ЕГЭ Тренажёр»
+    (9.80, 1.12, "lin"),
+    (10.25, 1.03, "ease"),  # «текстовый разбор»
+    (11.05, 1.05, "lin"),
+    (12.70, 1.15, "ease"),  # «без пути» — нарастание до открытия замка
+    (13.20, 1.04, "ease"),  # CTA
+    (DUR, 1.08, "lin"),
+]
+
+def zoom_at(t):
+    for (ta, sa, _), (tb, sb, mode) in zip(ZOOM_KEYS, ZOOM_KEYS[1:]):
+        if ta <= t <= tb:
+            p = (t - ta) / (tb - ta)
+            return sa + (sb - sa) * (ease_in_out(p) if mode == "ease" else p)
+    return ZOOM_KEYS[-1][1]
+
+def zoom_frame(src, t):
+    s = zoom_at(t)
+    if s <= 1.0005:
+        return src
+    ax, ay = ZOOM_ANCHOR
+    box = (ax - ax / s, ay - ay / s, ax + (W - ax) / s, ay + (H - ay) / s)
+    return src.resize((W, H), Image.LANCZOS, box=box)
 
 
 # ===================== БЕГУЩАЯ ПОДПИСЬ (слой 2) =====================
@@ -327,10 +492,15 @@ def build():
     els += card([("ОТВЕТЫ", 60, WHITE, 1.62, {}),
                  ("ВВЕРХ", 128, ACCENT, 2.14, {}),
                  ("НОГАМИ", 66, WHITE, 2.62, {"flip": True})], t_end=3.48)
-    # 3.72-5.24  реплика-признание: облачко у лица (смена носителя)
-    els.append(bubble([("НО ИНОГДА", 34, (0x5E, 0x58, 0x6B)), ("ПОДГЛЯДЫВАЮ", 44, INK)],
-                      3.72, 5.24, cx=826, cy=650))
-    # 5.24-6.63  тихий сброс (M15): только лицо и бегущая подпись
+    # 1.86-5.20  иллюстрация: лист ответов справа от лица, на «ногами» переворачивается
+    sheet_cx, sheet_cy = 856, 720
+    els.append(Sheet(sheet_cx, sheet_cy, 1.86, 5.20, flip_t=2.72))
+    # 3.72-5.20  из-за листа выглядывают глаза и косятся на ответы
+    els.append(Eyes(sheet_cx - 6, sheet_cy - 210, 3.72, 5.20))
+    # 3.96-5.20  «НО ИНОГДА / ПОДГЛЯДЫВАЮ»
+    els += card([("НО ИНОГДА", 58, WHITE, 3.96, {}),
+                 ("ПОДГЛЯДЫВАЮ", 98, ACCENT, 4.30, {})], t_end=5.20)
+    # 5.20-6.63  тихий участок: только лицо, бегущая подпись и медленный наезд камеры
     # 6.66-8.12  пара «ПУТЬ → ОТВЕТ» + «ПОДРЯД»
     row_y = 1206
     p1, _ = text_img("ПУТЬ", golos(104), WHITE)
@@ -348,22 +518,25 @@ def build():
     els.append(El(ic, W - 54 - iw / 2, 700, 8.46, DUR + 1, "none", fade_in=0.33, fade_out=0.0, z=4))
     # 9.84-11.06  «ТЕКСТОВЫЙ РАЗБОР»
     els += card([("ТЕКСТОВЫЙ", 60, WHITE, 9.84, {}),
-                 ("РАЗБОР", 128, ACCENT, 10.10, {})], t_end=11.06)
+                 ("РАЗБОР", 128, ACCENT, 10.10, {})], t_end=11.06, cy=1170)
+    els.append(WriteLines(540, 1345, 10.34, 11.06))
     # 11.10-12.74  «без пути» — редкая курсивная подпись + шкала-процесс
     els += card([("ответ не подглядеть", 58, WHITE, 11.10, {"italic": True}),
                  ("БЕЗ ПУТИ", 120, ACCENT, 11.66, {})], t_end=12.74, cy=1196)
-    els.append(Steps(5, 540, 1372, 11.36, 12.74, fill_t0=11.46, fill_dur=1.0))
+    els.append(LockSteps(4, 540, 1372, 11.36, 12.74, fill_t0=11.46, fill_dur=0.94))
     # 12.78-14.98  CTA «ССЫЛКА В ШАПКЕ ПРОФИЛЯ» + стрелка вверх
     els += card([("ССЫЛКА", 62, WHITE, 12.78, {}),
                  ("В ШАПКЕ", 118, ACCENT, 13.30, {}),
                  ("ПРОФИЛЯ", 70, WHITE, 14.08, {})], t_end=DUR + 1)
-    els.append(Arrow(190, False, 946, 1236, 13.62, DUR + 1, draw_time=0.3))
+    arrow = Arrow(190, False, 946, 1236, 13.62, DUR + 1, draw_time=0.3)
+    els.append(Bob(arrow, 14.0))
+    els.append(Bob(Item(link_icon(), 946, 1080, 13.92, DUR + 1), 14.0))
     els += build_captions()
     els.sort(key=lambda e: e.z)
     return els
 
-def render(els, scrim, t):
-    fr = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+def render(els, scrim, t, base=None):
+    fr = zoom_frame(base, t).convert("RGBA") if base is not None else Image.new("RGBA", (W, H), (0, 0, 0, 0))
     fr.alpha_composite(scrim, (0, TOP_SLOT_Y - 220))
     for e in els:
         st = e.state(t)
@@ -376,12 +549,16 @@ if __name__ == "__main__":
         bg = sys.argv[2]
         for ts in sys.argv[3:]:
             t = float(ts)
-            base = Image.open(f"{bg}/{ts}.png").convert("RGBA")
-            base.alpha_composite(render(els, scrim, t))
-            base.convert("RGB").save(f"qa/{ts}.png")
+            base = Image.open(f"{bg}/{ts}.png").convert("RGB")
+            render(els, scrim, t, base).convert("RGB").save(f"qa/{ts}.png")
     elif sys.argv[1:2] == ["--groups"]:
         for g in caption_groups(word_times()): print(f"{g[1]:6.2f}-{g[2]:6.2f} {g[0]}")
     else:
-        out = sys.stdout.buffer
+        # исходные кадры (rgb24) из stdin -> зум + графика -> rgb24 в stdout
+        inp, out = sys.stdin.buffer, sys.stdout.buffer
+        fsz = W * H * 3
         for i in range(NFR):
-            out.write(render(els, scrim, i / FPS).tobytes())
+            raw = inp.read(fsz)
+            if len(raw) < fsz: break
+            base = Image.frombytes("RGB", (W, H), raw)
+            out.write(render(els, scrim, i / FPS, base).convert("RGB").tobytes())

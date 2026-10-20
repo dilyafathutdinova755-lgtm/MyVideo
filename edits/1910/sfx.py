@@ -18,10 +18,15 @@ def whoosh():
 out=np.zeros(int(DUR*SR)+SR)
 def put(sig,t,lvl):
     s=sig/np.abs(sig).max()*lvl; i=int(t*SR); out[i:i+len(s)]+=s
-for t in (1.62,3.72,6.66,8.16,9.84,11.10,12.78): put(pop(),t,.13)
-put(ping(),8.46,.10)
-put(whoosh(),6.94,.11)
-put(whoosh(),13.62,.11)
+def chime():
+    t=np.arange(int(.7*SR))/SR
+    return sum(np.sin(2*np.pi*f*t)*np.exp(-t*k) for f,k in ((1318,6),(1975,7),(2637,9)))*np.minimum(1,t*300)
+for t in (1.62,3.96,6.66,8.16,9.84,11.10,12.78): put(pop(),t,.13)   # карточки
+put(pop(),3.72,.12)       # глаза
+put(ping(),8.46,.10)      # иконка приложения
+put(ping(),13.92,.10)     # иконка ссылки
+put(chime(),12.40,.13)    # замок открылся
+for t in (1.86,2.72,6.94,13.62): put(whoosh(),t,.11)   # лист: вход и переворот, стрелки
 out=out[:int(DUR*SR)]
 st=np.repeat((out*32767).astype(np.int16)[:,None],2,1)
 w=wave.open("sfx.wav","wb");w.setnchannels(2);w.setsampwidth(2);w.setframerate(SR);w.writeframes(st.tobytes())
