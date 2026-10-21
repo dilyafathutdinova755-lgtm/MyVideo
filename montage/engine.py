@@ -535,6 +535,7 @@ def build(spec):
     for g, a, b in subtitle_groups(spec):
         if any(h0 <= (a + b) / 2 < h1 for h0, h1 in hide): continue
         bl = next((o[2] for o in over if o[0] <= (a + b) / 2 < o[1]), base)
+        if bl is None: continue            # null в overrides = на это время субтитры скрыты
         subs.append(Subtitle(g, a, b, bl, slides))
     els += subs
     els.sort(key=lambda e: e.z)
