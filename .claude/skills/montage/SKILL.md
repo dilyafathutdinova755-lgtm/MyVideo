@@ -45,8 +45,11 @@ description: Монтаж вертикального ролика «говоря
 7. `python3 montage/engine.py projects/<имя>/edit.json --out projects/<имя>/out` → `final.mp4` + `subs.srt`.
    Проверить сеткой кадров раз в 0.33с. Слои для ручной доработки (`--layers`: base_zoom.mp4 + overlay.mov
    ProRes 4444 с альфой, ~20 МБ на секунду) — только если автор попросил.
-8. Отправить `final.mp4` автору (SendUserFile). Закоммитить `projects/<имя>/edit.json` и `transcript.json`
-   в рабочую ветку и запушить. Коротко: что где стоит, что проверено, что додумано самостоятельно.
+8. Закоммитить `projects/<имя>/edit.json`, `transcript.json` и сам `projects/<имя>/out/final.mp4`
+   (`out/` в `.gitignore` — коммитить рендер через `git add -f`) в рабочую ветку и запушить. Отдать автору
+   прямую ссылку на файл на GitHub вида `https://github.com/dilyafathutdinova755-lgtm/myvideo/blob/<ветка>/projects/<имя>/out/final.mp4` —
+   так теперь отдаётся каждый ролик, без исключений. SendUserFile можно добавить сверху как дубль, но ссылка
+   обязательна. Коротко: что где стоит, что проверено, что додумано самостоятельно.
 
 ## Правки автора
 
