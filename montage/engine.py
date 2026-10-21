@@ -16,6 +16,7 @@
 Формат edit.json — montage/EDIT_FORMAT.md.
 """
 import argparse, json, math, os, subprocess, sys
+from fractions import Fraction
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
@@ -152,7 +153,7 @@ def composition(ev, z):
         f = font(p.get("role", "WIDE"), p["size"])
         on_slide = z >= Z_ON_SLIDE
         img, (ox, oy) = text_img(p["text"], f, C(p.get("color", "ink" if on_slide else "cream")),
-                                 glow=0 if on_slide else 0.55, track=p.get("track", 0))
+                                 glow=p.get("glow", 0 if on_slide else 0.55), track=p.get("track", 0))
         rows.append(dict(img=img, oy=oy, size=p["size"], cap=-f.getbbox("Н", anchor="ls")[1], p=p))
     base = [0.0]
     for r in rows[1:]: base.append(base[-1] + r["p"].get("lead", 1.0) * r["size"])
@@ -344,6 +345,29 @@ class Arrow(El):
             dy -= 6 * math.sin(2 * math.pi * (t - self.bob) / 1.1)
         return s, a, dx, dy, rot
 
+def nowifi(ev, z):
+    """Значок Wi-Fi, перечёркнутый наискосок: «без интернета». Светлый на видео, тёмный на слайде."""
+    size = ev.get("size", 240); pad = 40
+    on_slide = z >= Z_ON_SLIDE
+    col, slash = PAL["ink"], PAL["plum"]
+    S = size + 2 * pad
+    img = Image.new("RGBA", (S, S), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
+    if not on_slide:      # плашка-стикер: читается на любом фоне
+        d.rounded_rectangle((pad * 0.35, pad * 0.35, S - pad * 0.35, S - pad * 0.35), 44, fill=PAL["milk"] + (255,))
+    cx, cy = S / 2, pad + size * 0.80
+    w = max(8, size // 18)
+    for r in (0.74, 0.52, 0.30):
+        R = size * r * 0.78
+        d.arc((cx - R, cy - R, cx + R, cy + R), 225, 315, fill=col + (255,), width=w)
+    d.ellipse((cx - w, cy - w, cx + w, cy + w), fill=col + (255,))
+    # просвет вокруг черты, чтобы она читалась поверх дуг
+    a, b = (pad + size * 0.12, pad + size * 0.10), (pad + size * 0.90, pad + size * 0.94)
+    gap = Image.new("L", (S, S), 0); ImageDraw.Draw(gap).line((*a, *b), fill=255, width=w * 3)
+    img.paste((0, 0, 0, 0), (0, 0), gap)
+    ImageDraw.Draw(img).line((*a, *b), fill=slash + (255,), width=w + 2)
+    if not on_slide: img = soft_shadow(img, blur=22, alpha=0.22, dy=10)
+    return [El(img, ev["cx"], ev["cy"], ev["t0"], ev["t1"], ev.get("motion", "M07"), z=z, out=ev.get("out", 0.12))]
+
 def link_icon(ev, z):
     w = h = 150
     img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
@@ -416,7 +440,7 @@ def word_times(chunks):
     out = []
     for t0, t1, txt in chunks:
         ws = txt.split()
-        syl = [max(1, sum(c in VOW for c in w)) + 0.3 for w in ws]
+        syl = [(2 * len(w) if w.isdigit() else max(1, sum(c in VOW for c in w))) + 0.3 for w in ws]
         tot, t = sum(syl), t0 + 0.04
         for w, s in zip(ws, syl):
             d = (t1 - t0 - 0.08) * s / tot
@@ -490,6 +514,7 @@ BUILDERS = {
     "lockpath": lambda ev, z: [LockPath(ev, z)],
     "arrow": lambda ev, z: [Arrow(ev, z)],
     "link": link_icon,
+    "nowifi": nowifi,
     "plaque": plaque,
     "text": text_line,
 }
@@ -504,11 +529,13 @@ def build(spec):
             raise ValueError(f"неизвестный тип события: {ev['type']}")
         els += BUILDERS[ev["type"]](ev, z)
     base = spec["subtitles"].get("baseline", 1556)
+    over = spec["subtitles"].get("overrides", [])      # [[t0, t1, baseline]] — поднять субтитры над демонстрируемым предметом
     hide = [(s.t0, s.t1) for s in slides if s.subs == "hide"]
     subs = []
     for g, a, b in subtitle_groups(spec):
         if any(h0 <= (a + b) / 2 < h1 for h0, h1 in hide): continue
-        subs.append(Subtitle(g, a, b, base, slides))
+        bl = next((o[2] for o in over if o[0] <= (a + b) / 2 < o[1]), base)
+        subs.append(Subtitle(g, a, b, bl, slides))
     els += subs
     els.sort(key=lambda e: e.z)
     return els, subs
@@ -560,8 +587,8 @@ def main():
                            stdout=subprocess.PIPE)
     enc_args = ["-c:v", "libx264", "-preset", "slow", "-crf", "17", "-profile:v", "high", "-pix_fmt", "yuv420p"]
     def enc(path, pix, extra, with_audio):
-        cmd = ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", pix, "-s", f"{W}x{H}", "-r", str(fps), "-i", "-"]
-        if with_audio: cmd += ["-i", src, "-map", "0:v", "-map", "1:a", "-c:a", "copy", "-shortest"]
+        cmd = ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", pix, "-s", f"{W}x{H}", "-r", str(Fraction(fps).limit_denominator(1001)), "-i", "-"]
+        if with_audio: cmd += ["-i", src, "-map", "0:v", "-map", "1:a", "-c:a", "copy"]
         tail = ["-movflags", "+faststart", path] if path.endswith(".mp4") else [path]
         return subprocess.Popen(cmd + extra + tail, stdin=subprocess.PIPE)
     final = enc(f"{out}/final.mp4", "rgb24", enc_args, True)
