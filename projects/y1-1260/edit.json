@@ -217,32 +217,30 @@
  },
  "events": [
   {
-   "type": "plaque",
-   "text": "ПРОХОДНЫЕ БАЛЛЫ",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1119,
-   "t0": 0.05,
+   "type": "plaque_stack",
    "t1": 2.4,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ВЫРОСЛИ",
-   "role": "WIDE",
-   "size": 110,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1262,
-   "t0": 0.5,
-   "t1": 2.4,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ПРОХОДНЫЕ БАЛЛЫ",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 0.05,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "ВЫРОСЛИ",
+     "role": "WIDE",
+     "size": 110,
+     "color": "blush",
+     "t": 0.5,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -294,32 +292,30 @@
    "color": "plum"
   },
   {
-   "type": "plaque",
-   "text": "ЗАПАС БАЛЛОВ",
-   "role": "COND",
-   "size": 88,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1142,
-   "t0": 6.4,
+   "type": "plaque_stack",
    "t1": 8.3,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "КАЗАЛСЯ КОМФОРТНЫМ",
-   "role": "WIDE",
-   "size": 48,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1255,
-   "t0": 7.1,
-   "t1": 8.3,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ЗАПАС БАЛЛОВ",
+     "role": "COND",
+     "size": 88,
+     "color": "cream",
+     "t": 6.4,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "КАЗАЛСЯ КОМФОРТНЫМ",
+     "role": "WIDE",
+     "size": 52,
+     "color": "blush",
+     "t": 7.1,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -394,46 +390,39 @@
    "motion": "M02"
   },
   {
-   "type": "plaque",
-   "text": "ЗАПАС НЕБОЛЬШОЙ?",
-   "role": "COND",
-   "size": 88,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1068,
-   "t0": 12.55,
+   "type": "plaque_stack",
    "t1": 15.85,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ЗАКРЫВАЙ ПРОБЕЛЫ",
-   "role": "WIDE",
-   "size": 58,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1199,
-   "t0": 13.4,
-   "t1": 15.85,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "прямо сейчас",
-   "role": "EDIT",
-   "size": 84,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1321,
-   "t0": 14.4,
-   "t1": 15.85,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ЗАПАС НЕБОЛЬШОЙ?",
+     "role": "COND",
+     "size": 88,
+     "color": "cream",
+     "t": 12.55,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "ЗАКРЫВАЙ ПРОБЕЛЫ",
+     "role": "WIDE",
+     "size": 62,
+     "color": "blush",
+     "t": 13.4,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "прямо сейчас",
+     "role": "EDIT",
+     "size": 84,
+     "color": "cream",
+     "t": 14.4,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -501,74 +490,73 @@
    "t1": 99
   },
   {
-   "type": "plaque",
-   "text": "ТЕКСТОВЫЙ РАЗБОР",
-   "role": "COND",
-   "size": 84,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1134,
-   "t0": 19.55,
+   "type": "plaque_stack",
    "t1": 21.45,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "КАЖДОГО ЗАДАНИЯ",
-   "role": "WIDE",
-   "size": 60,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1262,
-   "t0": 20.2,
-   "t1": 21.45,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "БЕЗ ПРОБЕЛОВ",
-   "role": "WIDE",
-   "size": 84,
-   "fill": "vanilla",
-   "color": "ink",
-   "cx": 540,
    "cy": 1190,
-   "t0": 21.55,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ТЕКСТОВЫЙ РАЗБОР",
+     "role": "COND",
+     "size": 84,
+     "color": "cream",
+     "t": 19.55,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "КАЖДОГО ЗАДАНИЯ",
+     "role": "WIDE",
+     "size": 64,
+     "color": "blush",
+     "t": 20.2,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
+  },
+  {
+   "type": "plaque_stack",
    "t1": 22.55,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "БЕЗ ПРОБЕЛОВ",
+     "role": "WIDE",
+     "size": 84,
+     "color": "vanilla",
+     "t": 21.55,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "ССЫЛКА",
-   "role": "WIDE",
-   "size": 110,
-   "fill": "vanilla",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1117,
-   "t0": 22.65,
+   "type": "plaque_stack",
    "t1": 99,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "в шапке профиля",
-   "role": "EDIT",
-   "size": 88,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1261,
-   "t0": 23.2,
-   "t1": 99,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ССЫЛКА",
+     "role": "WIDE",
+     "size": 110,
+     "color": "vanilla",
+     "t": 22.65,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "в шапке профиля",
+     "role": "EDIT",
+     "size": 88,
+     "color": "cream",
+     "t": 23.2,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "arrow",

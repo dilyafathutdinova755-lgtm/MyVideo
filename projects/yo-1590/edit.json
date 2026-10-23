@@ -347,102 +347,91 @@
  },
  "events": [
   {
-   "type": "plaque",
-   "text": "НИШЕВЫЕ",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1060,
-   "t0": 0.05,
+   "type": "plaque_stack",
    "t1": 1.9,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "НИШЕВЫЕ",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 0.05,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "СПЕЦИАЛЬНОСТИ",
+     "role": "WIDE",
+     "size": 72,
+     "color": "blush",
+     "t": 0.4,
+     "motion": "M04",
+     "dx": 0
+    },
+    {
+     "text": "для физмата",
+     "role": "EDIT",
+     "size": 84,
+     "color": "cream",
+     "t": 1.0,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "СПЕЦИАЛЬНОСТИ",
-   "role": "WIDE",
-   "size": 68,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1183,
-   "t0": 0.4,
-   "t1": 1.9,
-   "motion": "M04",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "для физмата",
-   "role": "EDIT",
-   "size": 84,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1314,
-   "t0": 1.0,
-   "t1": 1.9,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ФИЗИКА",
-   "role": "WIDE",
-   "size": 100,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1133,
-   "t0": 2.1,
+   "type": "plaque_stack",
    "t1": 3.3,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ФИЗИКА",
+     "role": "WIDE",
+     "size": 100,
+     "color": "blush",
+     "t": 2.1,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "И МАТЕМАТИКА",
+     "role": "WIDE",
+     "size": 76,
+     "color": "blush",
+     "t": 2.5,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "И МАТЕМАТИКА",
-   "role": "WIDE",
-   "size": 76,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1258,
-   "t0": 2.5,
-   "t1": 3.3,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "но не хотите быть",
-   "role": "EDIT",
-   "size": 80,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1142,
-   "t0": 3.5,
+   "type": "plaque_stack",
    "t1": 5.2,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ПРОСТЫМ ИНЖЕНЕРОМ",
-   "role": "WIDE",
-   "size": 52,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1248,
-   "t0": 4.0,
-   "t1": 5.2,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "но не хотите быть",
+     "role": "EDIT",
+     "size": 80,
+     "color": "cream",
+     "t": 3.5,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "ПРОСТЫМ ИНЖЕНЕРОМ",
+     "role": "WIDE",
+     "size": 54,
+     "color": "blush",
+     "t": 4.0,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -506,88 +495,82 @@
    "motion": "M02"
   },
   {
-   "type": "plaque",
-   "text": "РАСЧЁТ",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1118,
-   "t0": 9.4,
+   "type": "plaque_stack",
    "t1": 11.0,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "РАСЧЁТ",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 9.4,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "РИСКОВ",
+     "role": "WIDE",
+     "size": 112,
+     "color": "blush",
+     "t": 9.8,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "РИСКОВ",
-   "role": "WIDE",
-   "size": 112,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1266,
-   "t0": 9.8,
-   "t1": 11.0,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "страховые компании",
-   "role": "EDIT",
-   "size": 84,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1126,
-   "t0": 11.1,
+   "type": "plaque_stack",
    "t1": 12.35,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "страховые компании",
+     "role": "EDIT",
+     "size": 84,
+     "color": "cream",
+     "t": 11.1,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "И ФИНАНСЫ",
+     "role": "WIDE",
+     "size": 88,
+     "color": "vanilla",
+     "t": 11.5,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "И ФИНАНСЫ",
-   "role": "WIDE",
-   "size": 88,
-   "fill": "vanilla",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1250,
-   "t0": 11.5,
-   "t1": 12.35,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "довольно редкая",
-   "role": "EDIT",
-   "size": 84,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1144,
-   "t0": 12.6,
+   "type": "plaque_stack",
    "t1": 14.8,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ХОРОШО ОПЛАЧИВАЕМАЯ",
-   "role": "WIDE",
-   "size": 48,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1262,
-   "t0": 13.4,
-   "t1": 14.8,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "довольно редкая",
+     "role": "EDIT",
+     "size": 84,
+     "color": "cream",
+     "t": 12.6,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "ХОРОШО ОПЛАЧИВАЕМАЯ",
+     "role": "WIDE",
+     "size": 50,
+     "color": "blush",
+     "t": 13.4,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -651,74 +634,73 @@
    "motion": "M02"
   },
   {
-   "type": "plaque",
-   "text": "НЕВЕРОЯТНО",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1124,
-   "t0": 20.2,
+   "type": "plaque_stack",
    "t1": 22.0,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "БЫСТРО РАСТЁТ",
-   "role": "WIDE",
-   "size": 76,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1256,
-   "t0": 20.55,
-   "t1": 22.0,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ФИЗИКА И МАТЕМАТИКА",
-   "role": "COND",
-   "size": 84,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1136,
-   "t0": 22.3,
-   "t1": 24.0,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "В СЛЕДУЮЩЕМ ГОДУ",
-   "role": "WIDE",
-   "size": 58,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1256,
-   "t0": 23.0,
-   "t1": 24.0,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ХОРОШИЕ НОВОСТИ",
-   "role": "WIDE",
-   "size": 62,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
    "cy": 1190,
-   "t0": 24.1,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "НЕВЕРОЯТНО",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 20.2,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "БЫСТРО РАСТЁТ",
+     "role": "WIDE",
+     "size": 76,
+     "color": "blush",
+     "t": 20.55,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
+  },
+  {
+   "type": "plaque_stack",
+   "t1": 24.0,
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ФИЗИКА И МАТЕМАТИКА",
+     "role": "COND",
+     "size": 84,
+     "color": "cream",
+     "t": 22.3,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "В СЛЕДУЮЩЕМ ГОДУ",
+     "role": "WIDE",
+     "size": 62,
+     "color": "blush",
+     "t": 23.0,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
+  },
+  {
+   "type": "plaque_stack",
    "t1": 25.1,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ХОРОШИЕ НОВОСТИ",
+     "role": "WIDE",
+     "size": 66,
+     "color": "blush",
+     "t": 24.1,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "app_icon",
@@ -799,60 +781,56 @@
    "motion": "M02"
   },
   {
-   "type": "plaque",
-   "text": "ПОДРОБНЫЕ",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1127,
-   "t0": 29.0,
+   "type": "plaque_stack",
    "t1": 31.0,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ПОДРОБНЫЕ",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 29.0,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "ВИДЕОРАЗБОРЫ",
+     "role": "WIDE",
+     "size": 80,
+     "color": "blush",
+     "t": 29.4,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "ВИДЕОРАЗБОРЫ",
-   "role": "WIDE",
-   "size": 76,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1262,
-   "t0": 29.4,
-   "t1": 31.0,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "КАЖДОГО ЗАДАНИЯ",
-   "role": "WIDE",
-   "size": 60,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1119,
-   "t0": 31.1,
+   "type": "plaque_stack",
    "t1": 32.8,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "без пробелов",
-   "role": "EDIT",
-   "size": 84,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1246,
-   "t0": 32.0,
-   "t1": 32.8,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "КАЖДОГО ЗАДАНИЯ",
+     "role": "WIDE",
+     "size": 64,
+     "color": "blush",
+     "t": 31.1,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "без пробелов",
+     "role": "EDIT",
+     "size": 84,
+     "color": "cream",
+     "t": 32.0,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -911,32 +889,30 @@
    "on_slide": true
   },
   {
-   "type": "plaque",
-   "text": "ПОСЛЕДНЕЕ",
-   "role": "COND",
-   "size": 88,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1131,
-   "t0": 36.7,
+   "type": "plaque_stack",
    "t1": 38.6,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "БИОМЕХАНИКА",
-   "role": "WIDE",
-   "size": 80,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1261,
-   "t0": 37.2,
-   "t1": 38.6,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ПОСЛЕДНЕЕ",
+     "role": "COND",
+     "size": 88,
+     "color": "cream",
+     "t": 36.7,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "БИОМЕХАНИКА",
+     "role": "WIDE",
+     "size": 80,
+     "color": "blush",
+     "t": 37.2,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -1000,74 +976,65 @@
    "motion": "M02"
   },
   {
-   "type": "plaque",
-   "text": "ЧАЩЕ ВСЕГО",
-   "role": "COND",
-   "size": 88,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1134,
-   "t0": 42.4,
+   "type": "plaque_stack",
    "t1": 44.7,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ЧАЩЕ ВСЕГО",
+     "role": "COND",
+     "size": 88,
+     "color": "cream",
+     "t": 42.4,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "СПОРТ И МЕДИЦИНА",
+     "role": "WIDE",
+     "size": 64,
+     "color": "blush",
+     "t": 43.0,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "СПОРТ И МЕДИЦИНА",
-   "role": "WIDE",
-   "size": 60,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1261,
-   "t0": 43.0,
-   "t1": 44.7,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ПИШИТЕ",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1081,
-   "t0": 44.9,
+   "type": "plaque_stack",
    "t1": 99,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "В КОММЕНТАРИИ",
-   "role": "WIDE",
-   "size": 72,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1202,
-   "t0": 45.3,
-   "t1": 99,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "какая специальность понравилась",
-   "role": "EDIT",
-   "size": 64,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1312,
-   "t0": 46.2,
-   "t1": 99,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ПИШИТЕ",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 44.9,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "В КОММЕНТАРИИ",
+     "role": "WIDE",
+     "size": 76,
+     "color": "blush",
+     "t": 45.3,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "какая специальность понравилась",
+     "role": "EDIT",
+     "size": 68,
+     "color": "cream",
+     "t": 46.2,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   }
  ]
 }

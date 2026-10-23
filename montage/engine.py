@@ -60,6 +60,78 @@ def out_back(p, c1=1.0):
 def in_out(p): return 0.5 - 0.5 * math.cos(math.pi * clamp(p))
 
 
+
+# ===================== ЛИЦО: детектор и защита от наезда текста =====================
+FACE_MODEL = os.path.join(ROOT, "models", "face_detection_yunet_2023mar.onnx")
+FACE_MARGIN = 30           # запас под подбородком, px
+TEXT_BOTTOM_LIMIT = 1500   # крупные надписи не ниже (ниже — субтитры и интерфейс площадки)
+_FACE = None               # Face текущего ролика (ставится в main), None — защита выключена
+_DUR = 99.0
+_KEEP = []                 # вшитые в видео элементы, которые нельзя закрывать: [{t0,t1,box:[x0,y0,x1,y1]}]
+
+def _limit(t0, t1):
+    """Нижняя граница для крупных надписей на отрезке: не ниже TEXT_BOTTOM_LIMIT и выше вшитых карточек/иконок."""
+    lim = TEXT_BOTTOM_LIMIT
+    for k in _KEEP:
+        if k["t0"] < t1 and k["t1"] > t0: lim = min(lim, k["box"][1] - 26)
+    return lim
+
+def detect_faces(src, out_path, step=0.2):
+    """Лицо каждые step секунд (YuNet). Пишет {"step", "boxes": [[x,y,w,h] | null, ...]} в 1080x1920 исходника."""
+    import cv2, numpy as np
+    if not os.path.exists(FACE_MODEL):
+        raise FileNotFoundError(f"нет модели лица {FACE_MODEL} — запустить bash montage/setup.sh")
+    det = cv2.FaceDetectorYN.create(FACE_MODEL, "", (W, H), 0.5, 0.3, 5000)
+    dec = subprocess.Popen(["ffmpeg", "-v", "error", "-i", src, "-vf", f"fps={1 / step}", "-f", "rawvideo",
+                            "-pix_fmt", "bgr24", "-"], stdout=subprocess.PIPE)
+    boxes, fsz = [], W * H * 3
+    while True:
+        raw = dec.stdout.read(fsz)
+        if len(raw) < fsz: break
+        img = np.frombuffer(raw, np.uint8).reshape(H, W, 3).copy()
+        _, f = det.detect(img)
+        if f is None or len(f) == 0: boxes.append(None)
+        else:
+            k = int(np.argmax(f[:, 2] * f[:, 3]))                 # самое крупное лицо
+            boxes.append([round(float(v), 1) for v in f[k][:4]])
+    dec.wait()
+    json.dump({"step": step, "boxes": boxes}, open(out_path, "w"))
+    return boxes
+
+class Face:
+    """Положение лица во времени с учётом зума видеоряда."""
+    def __init__(self, path, zk, anchor):
+        d = json.load(open(path)); self.step, b = d["step"], d["boxes"]
+        last = next((x for x in b if x), None)
+        self.boxes = []
+        for x in b:                                               # пропуски — держим соседнее положение
+            last = x or last; self.boxes.append(last)
+        self.zk, self.anchor = zk, anchor
+    def _z(self, box, t):
+        if not box: return None
+        s = zoom_at(self.zk, t) if self.zk else 1.0
+        ax, ay = self.anchor; x, y, w, h = box
+        return (ax + (x - ax) * s, ay + (y - ay) * s, ax + (x + w - ax) * s, ay + (y + h - ay) * s)
+    def at(self, t):
+        if not self.boxes: return None
+        return self._z(self.boxes[min(len(self.boxes) - 1, max(0, round(t / self.step)))], t)
+    def bottom(self, t0, t1):
+        """Самая низкая точка лица (подбородок) на отрезке [t0, t1] с запасом по времени."""
+        lo, hi = max(0, int((t0 - 0.3) / self.step)), int((min(t1, _DUR) + 0.3) / self.step) + 1
+        vals = [self._z(b, i * self.step) for i, b in enumerate(self.boxes[lo:hi + 1], lo)]
+        vals = [v[3] for v in vals if v]
+        return max(vals) if vals else 0.0
+
+def fit_size(text, role, size, maxw, track=0):
+    while size > 30:
+        f = font(role, size)
+        w = f.getlength(text) + (track * (len(text) - 1) if track else 0)
+        if w <= maxw: return size
+        size -= 2
+    return size
+
+_FILL = {"cream": "milk", "blush": "blush", "vanilla": "vanilla"}
+
 # ---------- растеризация ----------
 def text_img(txt, fnt, fill, glow=0.55, blur=14, pad=48, track=0):
     """Текст без обводки; на видео читаемость держит мягкая тёмная тень (§3.3)."""
@@ -147,17 +219,31 @@ def place(frame, img, cx, cy, st):
 # ===================== КОМПОНЕНТЫ =====================
 def composition(ev, z):
     """Крупная многосоставная надпись (§5.3): геометрия считается заранее, строки
-    раскрываются в зарезервированных местах. Базовая линия: prev + lead * кегль."""
-    rows = []
-    for p in ev["parts"]:
-        f = font(p.get("role", "WIDE"), p["size"])
-        on_slide = z >= Z_ON_SLIDE
-        img, (ox, oy) = text_img(p["text"], f, C(p.get("color", "ink" if on_slide else "cream")),
-                                 glow=p.get("glow", 0 if on_slide else 0.55), track=p.get("track", 0))
-        rows.append(dict(img=img, oy=oy, size=p["size"], cap=-f.getbbox("Н", anchor="ls")[1], p=p))
-    base = [0.0]
-    for r in rows[1:]: base.append(base[-1] + r["p"].get("lead", 1.0) * r["size"])
-    shift = ev.get("cy", 1185) - (-rows[0]["cap"] + base[-1]) / 2
+    раскрываются в зарезервированных местах. Базовая линия: prev + lead * кегль.
+    Если известно положение лица, блок уходит ниже подбородка (а при нехватке места уменьшается)."""
+    on_slide = z >= Z_ON_SLIDE
+    use_face = _FACE is not None and not on_slide and "cx" not in ev and ev.get("avoid_face", True) and not os.environ.get("MONTAGE_NO_AVOID")
+    t_from = min(p["t"] for p in ev["parts"])
+    need = _FACE.bottom(t_from, ev["t1"]) + FACE_MARGIN if use_face else None
+    scale = 1.0
+    while True:
+        rows = []
+        for p in ev["parts"]:
+            size = max(24, round(p["size"] * scale))
+            f = font(p.get("role", "WIDE"), size)
+            img, (ox, oy) = text_img(p["text"], f, C(p.get("color", "ink" if on_slide else "cream")),
+                                     glow=p.get("glow", 0 if on_slide else 0.55), track=round(p.get("track", 0) * scale))
+            rows.append(dict(img=img, oy=oy, size=size, cap=-f.getbbox("Н", anchor="ls")[1], p=p))
+        base = [0.0]
+        for r in rows[1:]: base.append(base[-1] + r["p"].get("lead", 1.0) * r["size"])
+        shift = ev.get("cy", 1185) - (-rows[0]["cap"] + base[-1]) / 2
+        if use_face:
+            top = shift - rows[0]["cap"]
+            if top < need: shift += need - top
+            if base[-1] + shift + 0.12 * rows[-1]["size"] <= _limit(t_from, ev["t1"]) or scale <= 0.62: break
+            scale -= 0.04
+        else:
+            break
     out = []
     for r, b in zip(rows, base):
         img, by, p = r["img"], b + shift, r["p"]
@@ -169,7 +255,36 @@ def composition(ev, z):
         cx = ev.get("cx", W / 2) + p.get("dx", 0)
         if not (cx - img.width / 2 + 48 >= SIDE - 1 and cx + img.width / 2 - 48 <= W - SIDE + 1):
             raise ValueError(f"строка «{p['text']}» шире поля ({img.width - 96}px) — уменьшить кегль")
-        out.append(El(img, cx, cy, p["t"], ev["t1"], p.get("motion", "M01"), z=z, out=ev.get("out", 0.12)))
+        e = El(img, cx, cy, p["t"], ev["t1"], p.get("motion", "M01"), z=z, out=ev.get("out", 0.12))
+        e.label = p["text"]; out.append(e)
+    return out
+
+def plaque_stack(ev, z):
+    """Стопка пастельных плашек с тёмным текстом (для светлой одежды). Та же защита от наезда на лицо."""
+    use_face = _FACE is not None and z < Z_ON_SLIDE and "cx" not in ev and ev.get("avoid_face", True) and not os.environ.get("MONTAGE_NO_AVOID")
+    need = _FACE.bottom(min(p["t"] for p in ev["parts"]), ev["t1"]) + FACE_MARGIN if use_face else None
+    scale, gap = 1.0, 12
+    while True:
+        rows = []
+        for q in ev["parts"]:
+            size = fit_size(q["text"], q.get("role", "WIDE"), max(24, round(q["size"] * scale)), 850)
+            f = font(q.get("role", "WIDE"), size); l, t, r, b = f.getbbox(q["text"], anchor="ls")
+            rows.append((q, size, (b - t) + 44))
+        total = sum(h for _, _, h in rows) + gap * (len(rows) - 1)
+        y0 = ev["cy"] - total / 2
+        if use_face:
+            if y0 < need: y0 = need
+            if y0 + total <= _limit(min(p["t"] for p in ev["parts"]), ev["t1"]) or scale <= 0.62: break
+            scale -= 0.04
+        else:
+            break
+    out, y = [], y0
+    for q, size, h in rows:
+        out += plaque(dict(text=q["text"], role=q.get("role", "WIDE"), size=size, fill=_FILL.get(q.get("color", "cream"), "milk"),
+                           color="ink", cx=(ev.get("cx", W / 2)) + q.get("dx", 0), cy=round(y + h / 2), t0=q["t"], t1=ev["t1"],
+                           motion=q.get("motion", "M01"), out=ev.get("out", 0.12)), z)
+        y += h + gap
+    for e in out: e.label = e.label if hasattr(e, "label") else "плашка"
     return out
 
 def answer_sheet(ev):
@@ -391,7 +506,9 @@ def plaque(ev, z):
     d.rounded_rectangle((pad, pad, w - pad, h - pad), 30, fill=C(ev.get("fill", "vanilla")) + (255,))
     d.text((pad + px - l, pad + py - t), ev["text"], font=f, fill=C(ev.get("color", "ink")) + (255,), anchor="ls")
     img = soft_shadow(img, blur=20, alpha=0.16, dy=10)
-    return [El(img, ev.get("cx", W / 2), ev["cy"], ev["t0"], ev["t1"], ev.get("motion", "M02"), z=z, out=ev.get("out", 0.0))]
+    e = El(img, ev.get("cx", W / 2), ev["cy"], ev["t0"], ev["t1"], ev.get("motion", "M02"), z=z, out=ev.get("out", 0.0))
+    e.label = ev["text"]
+    return [e]
 
 def text_line(ev, z):
     """Одиночная строка (на слайде — тёмная без тени, на видео — светлая с тенью)."""
@@ -516,6 +633,7 @@ BUILDERS = {
     "link": link_icon,
     "nowifi": nowifi,
     "plaque": plaque,
+    "plaque_stack": plaque_stack,
     "text": text_line,
 }
 
@@ -553,6 +671,60 @@ def compose(els, t, base_img, scrim):
     return fr
 
 
+
+def audit(els, slides, face, dur, step=0.2):
+    """Ищет кадры, где графика на видео (не на слайде) заходит на лицо. Возвращает список (t0, t1, что)."""
+    if face is None: return []
+    abox = {}
+    def ab(e):
+        if id(e) not in abox:
+            abox[id(e)] = e.img.getchannel("A").point(lambda v: 255 if v > 70 else 0).getbbox() if e.img is not None else None
+        return abox[id(e)]
+    bad = {}
+    t = 0.0
+    while t < dur:
+        fb = face.at(t)
+        if fb:
+            covered = any(s.t0 + 0.4 <= t < s.t1 - 0.2 for s in slides)
+            if not covered:
+                for e in els:
+                    if isinstance(e, Slide) or e.z >= Z_ON_SLIDE: continue
+                    st = e.state(t)
+                    if st is None or st[1] < 0.5 or e.img is None: continue
+                    box = ab(e)
+                    if not box: continue
+                    s_, a_, dx, dy, rot = st
+                    cx, cy = e.cx + dx, e.cy + dy
+                    w, h = e.img.size
+                    x0, y0, x1, y1 = (cx + (box[0] - w / 2) * s_, cy + (box[1] - h / 2) * s_,
+                                      cx + (box[2] - w / 2) * s_, cy + (box[3] - h / 2) * s_)
+                    if x0 < fb[2] and x1 > fb[0] and y0 < fb[3] and y1 > fb[1]:
+                        key = getattr(e, "label", "текст"); bad.setdefault(key, []).append(round(t, 2))
+        if True:
+            for k in _KEEP:
+                if not (k["t0"] <= t < k["t1"]): continue
+                for e in els:
+                    if isinstance(e, Slide) or e.z >= Z_ON_SLIDE or e.img is None: continue
+                    if any(s.t0 + 0.4 <= t < s.t1 - 0.2 for s in slides): continue
+                    st = e.state(t)
+                    if st is None or st[1] < 0.5: continue
+                    box = ab(e)
+                    if not box: continue
+                    s_, a_, dx, dy, rot = st; cx, cy = e.cx + dx, e.cy + dy; w, h = e.img.size
+                    x0, y0, x1, y1 = (cx + (box[0] - w / 2) * s_, cy + (box[1] - h / 2) * s_, cx + (box[2] - w / 2) * s_, cy + (box[3] - h / 2) * s_)
+                    kb = k["box"]
+                    if x0 < kb[2] and x1 > kb[0] and y0 < kb[3] and y1 > kb[1]:
+                        key = "на вшитом: " + getattr(e, "label", "текст"); bad.setdefault(key, []).append(round(t, 2))
+        t += step
+    res = []
+    for k, ts in bad.items():
+        a = b = ts[0]
+        for x in ts[1:]:
+            if x - b > step * 1.5: res.append((a, b + step, k)); a = x
+            b = x
+        res.append((a, b + step, k))
+    return sorted(res)
+
 def srt_time(t):
     ms = round(t * 1000); return f"{ms // 3600000:02}:{ms // 60000 % 60:02}:{ms // 1000 % 60:02},{ms % 1000:03}"
 
@@ -561,6 +733,8 @@ def main():
     ap.add_argument("spec")
     ap.add_argument("--stills", nargs="*", type=float)
     ap.add_argument("--out")
+    ap.add_argument("--audit", action="store_true", help="только проверка: заходит ли графика на лицо")
+    ap.add_argument("--force", action="store_true", help="рендерить, даже если аудит нашёл наезд на лицо")
     ap.add_argument("--layers", action="store_true",
                     help="ещё base_zoom.mp4 и overlay.mov (ProRes 4444 с альфой, ~20 МБ на секунду)")
     a = ap.parse_args()
@@ -569,10 +743,27 @@ def main():
     src = os.path.join(here, spec["source"]) if not os.path.isabs(spec["source"]) else spec["source"]
     fps, dur = spec["fps"], spec["duration"]
     nfr = round(dur * fps)
-    els, subs = build(spec)
-    scrim = bottom_scrim()
     zk = [tuple(k) for k in spec.get("zoom", {}).get("keys", [])]
     anchor = spec.get("zoom", {}).get("anchor", [540, 700])
+    global _FACE, _DUR, _KEEP
+    _DUR = dur
+    _KEEP = spec.get("keepout", [])
+    fpath = os.path.join(here, "face.json")
+    if not os.path.exists(fpath) and os.path.exists(FACE_MODEL):
+        print("ищу лицо в кадрах…"); detect_faces(src, fpath)
+    _FACE = Face(fpath, zk, anchor) if os.path.exists(fpath) else None
+    els, subs = build(spec)
+    slides = [e for e in els if isinstance(e, Slide)]
+    bad = audit(els, slides, _FACE, dur)
+    if bad:
+        print("НАЕЗД НА ЛИЦО:")
+        for t0, t1, k in bad[:30]: print(f"  {t0:5.1f}-{t1:5.1f}с  «{k}»")
+    elif _FACE is not None:
+        print("аудит лица: чисто")
+    if a.audit: sys.exit(1 if bad else 0)
+    if bad and not a.force and a.stills is None:
+        print("рендер остановлен: поправьте edit.json или запустите с --force"); sys.exit(2)
+    scrim = bottom_scrim()
 
     if a.stills is not None:
         out = a.out or os.path.join(here, "stills"); os.makedirs(out, exist_ok=True)

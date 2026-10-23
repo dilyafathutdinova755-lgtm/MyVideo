@@ -287,32 +287,30 @@
  },
  "events": [
   {
-   "type": "plaque",
-   "text": "ОБ ЭТОМ ВСЕ",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1136,
-   "t0": 0.05,
+   "type": "plaque_stack",
    "t1": 2.4,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "БОЯТСЯ ГОВОРИТЬ",
-   "role": "WIDE",
-   "size": 66,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1256,
-   "t0": 0.5,
-   "t1": 2.4,
-   "motion": "M04",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ОБ ЭТОМ ВСЕ",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 0.05,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "БОЯТСЯ ГОВОРИТЬ",
+     "role": "WIDE",
+     "size": 66,
+     "color": "blush",
+     "t": 0.5,
+     "motion": "M04",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -351,46 +349,39 @@
    "motion": "M02"
   },
   {
-   "type": "plaque",
-   "text": "ВСЕ ОБСУЖДАЮТ",
-   "role": "COND",
-   "size": 88,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1074,
-   "t0": 4.7,
+   "type": "plaque_stack",
    "t1": 7.5,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "СКОЛЬКО ЧАСОВ",
-   "role": "WIDE",
-   "size": 74,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1203,
-   "t0": 5.3,
-   "t1": 7.5,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "КАКАЯ ШКОЛА",
-   "role": "WIDE",
-   "size": 76,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1318,
-   "t0": 6.4,
-   "t1": 7.5,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ВСЕ ОБСУЖДАЮТ",
+     "role": "COND",
+     "size": 88,
+     "color": "cream",
+     "t": 4.7,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "СКОЛЬКО ЧАСОВ",
+     "role": "WIDE",
+     "size": 76,
+     "color": "blush",
+     "t": 5.3,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "КАКАЯ ШКОЛА",
+     "role": "WIDE",
+     "size": 76,
+     "color": "blush",
+     "t": 6.4,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -442,60 +433,56 @@
    "color": "plum"
   },
   {
-   "type": "plaque",
-   "text": "ПОСЛЕ ПОДГОТОВКИ",
-   "role": "COND",
-   "size": 84,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1127,
-   "t0": 11.7,
+   "type": "plaque_stack",
    "t1": 14.75,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ПОСЛЕ ПОДГОТОВКИ",
+     "role": "COND",
+     "size": 84,
+     "color": "cream",
+     "t": 11.7,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "МАЛО СДЕЛАЛ?",
+     "role": "WIDE",
+     "size": 80,
+     "color": "blush",
+     "t": 12.5,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "МАЛО СДЕЛАЛ?",
-   "role": "WIDE",
-   "size": 76,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1260,
-   "t0": 12.5,
-   "t1": 14.75,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "НЕ ДОЖАЛ?",
-   "role": "WIDE",
-   "size": 100,
-   "fill": "vanilla",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1144,
-   "t0": 14.85,
+   "type": "plaque_stack",
    "t1": 17.05,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "слишком мало",
-   "role": "EDIT",
-   "size": 84,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1264,
-   "t0": 15.8,
-   "t1": 17.05,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "НЕ ДОЖАЛ?",
+     "role": "WIDE",
+     "size": 100,
+     "color": "vanilla",
+     "t": 14.85,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "слишком мало",
+     "role": "EDIT",
+     "size": 84,
+     "color": "cream",
+     "t": 15.8,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -545,32 +532,30 @@
    "on_slide": true
   },
   {
-   "type": "plaque",
-   "text": "ГДЕ ОТСЛЕЖИВАТЬ",
-   "role": "COND",
-   "size": 86,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1122,
-   "t0": 21.0,
+   "type": "plaque_stack",
    "t1": 24.5,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ПРОГРЕСС",
-   "role": "WIDE",
-   "size": 104,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1260,
-   "t0": 22.0,
-   "t1": 24.5,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ГДЕ ОТСЛЕЖИВАТЬ",
+     "role": "COND",
+     "size": 86,
+     "color": "cream",
+     "t": 21.0,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "ПРОГРЕСС",
+     "role": "WIDE",
+     "size": 104,
+     "color": "blush",
+     "t": 22.0,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "app_icon",
@@ -686,88 +671,82 @@
    "color": "plum"
   },
   {
-   "type": "plaque",
-   "text": "ЭТО ЧЕСТНЕЕ",
-   "role": "WIDE",
-   "size": 76,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1133,
-   "t0": 32.9,
+   "type": "plaque_stack",
    "t1": 34.6,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ЭТО ЧЕСТНЕЕ",
+     "role": "WIDE",
+     "size": 76,
+     "color": "blush",
+     "t": 32.9,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "чем ощущения",
+     "role": "EDIT",
+     "size": 84,
+     "color": "cream",
+     "t": 33.5,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "чем ощущения",
-   "role": "EDIT",
-   "size": 84,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1248,
-   "t0": 33.5,
-   "t1": 34.6,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "Я ДЕЛАЮ",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1127,
-   "t0": 34.7,
+   "type": "plaque_stack",
    "t1": 36.0,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "Я ДЕЛАЮ",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 34.7,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "НЕДОСТАТОЧНО",
+     "role": "WIDE",
+     "size": 76,
+     "color": "vanilla",
+     "t": 35.0,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "НЕДОСТАТОЧНО",
-   "role": "WIDE",
-   "size": 76,
-   "fill": "vanilla",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1262,
-   "t0": 35.0,
-   "t1": 36.0,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ССЫЛКА",
-   "role": "WIDE",
-   "size": 110,
-   "fill": "vanilla",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1117,
-   "t0": 36.1,
+   "type": "plaque_stack",
    "t1": 99,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "в шапке профиля",
-   "role": "EDIT",
-   "size": 88,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1261,
-   "t0": 36.65,
-   "t1": 99,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ССЫЛКА",
+     "role": "WIDE",
+     "size": 110,
+     "color": "vanilla",
+     "t": 36.1,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "в шапке профиля",
+     "role": "EDIT",
+     "size": 88,
+     "color": "cream",
+     "t": 36.65,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "arrow",

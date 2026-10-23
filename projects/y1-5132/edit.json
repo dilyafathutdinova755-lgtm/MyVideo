@@ -213,32 +213,30 @@
  },
  "events": [
   {
-   "type": "plaque",
-   "text": "КТО БОИТСЯ",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1136,
-   "t0": 0.05,
+   "type": "plaque_stack",
    "t1": 1.75,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ЕГЭ БОЛЬШЕ ВСЕХ",
-   "role": "WIDE",
-   "size": 66,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1256,
-   "t0": 0.5,
-   "t1": 1.75,
-   "motion": "M04",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "КТО БОИТСЯ",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 0.05,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "ЕГЭ БОЛЬШЕ ВСЕХ",
+     "role": "WIDE",
+     "size": 66,
+     "color": "blush",
+     "t": 0.5,
+     "motion": "M04",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -290,60 +288,56 @@
    "color": "plum"
   },
   {
-   "type": "plaque",
-   "text": "ГОТОВЯТСЯ",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1122,
-   "t0": 5.2,
+   "type": "plaque_stack",
    "t1": 7.45,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ГОТОВЯТСЯ",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 5.2,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "К ТЕОРИИ",
+     "role": "WIDE",
+     "size": 100,
+     "color": "vanilla",
+     "t": 5.55,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "К ТЕОРИИ",
-   "role": "WIDE",
-   "size": 100,
-   "fill": "vanilla",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1256,
-   "t0": 5.55,
-   "t1": 7.45,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ЗАКОНОМЕРНОСТЬ",
-   "role": "COND",
-   "size": 86,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1138,
-   "t0": 7.5,
+   "type": "plaque_stack",
    "t1": 9.85,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "У 99% ШКОЛЬНИКОВ",
-   "role": "WIDE",
-   "size": 60,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1254,
-   "t0": 8.2,
-   "t1": 9.85,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ЗАКОНОМЕРНОСТЬ",
+     "role": "COND",
+     "size": 86,
+     "color": "cream",
+     "t": 7.5,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "У 99% ШКОЛЬНИКОВ",
+     "role": "WIDE",
+     "size": 60,
+     "color": "blush",
+     "t": 8.2,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -450,32 +444,30 @@
    "t1": 99
   },
   {
-   "type": "plaque",
-   "text": "ПРОБНИКИ",
-   "role": "WIDE",
-   "size": 88,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1122,
-   "t0": 16.8,
+   "type": "plaque_stack",
    "t1": 19.5,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "в ЕГЭ Тренажёре",
-   "role": "EDIT",
-   "size": 84,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1252,
-   "t0": 17.5,
-   "t1": 19.5,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ПРОБНИКИ",
+     "role": "WIDE",
+     "size": 88,
+     "color": "blush",
+     "t": 16.8,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "в ЕГЭ Тренажёре",
+     "role": "EDIT",
+     "size": 84,
+     "color": "cream",
+     "t": 17.5,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -536,32 +528,30 @@
    "color": "plum"
   },
   {
-   "type": "plaque",
-   "text": "ССЫЛКА",
-   "role": "WIDE",
-   "size": 110,
-   "fill": "vanilla",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1117,
-   "t0": 22.7,
+   "type": "plaque_stack",
    "t1": 99,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "в шапке профиля",
-   "role": "EDIT",
-   "size": 88,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1261,
-   "t0": 23.25,
-   "t1": 99,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ССЫЛКА",
+     "role": "WIDE",
+     "size": 110,
+     "color": "vanilla",
+     "t": 22.7,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "в шапке профиля",
+     "role": "EDIT",
+     "size": 88,
+     "color": "cream",
+     "t": 23.25,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "arrow",

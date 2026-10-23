@@ -312,46 +312,39 @@
  },
  "events": [
   {
-   "type": "plaque",
-   "text": "СКОЛЬКО ЧАСОВ",
-   "role": "COND",
-   "size": 88,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1080,
-   "t0": 0.05,
+   "type": "plaque_stack",
    "t1": 2.3,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "В ДЕНЬ НУЖНО",
-   "role": "WIDE",
-   "size": 80,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1209,
-   "t0": 0.5,
-   "t1": 2.3,
-   "motion": "M04",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "летом",
-   "role": "EDIT",
-   "size": 84,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1319,
-   "t0": 1.3,
-   "t1": 2.3,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "СКОЛЬКО ЧАСОВ",
+     "role": "COND",
+     "size": 88,
+     "color": "cream",
+     "t": 0.05,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "В ДЕНЬ НУЖНО",
+     "role": "WIDE",
+     "size": 80,
+     "color": "blush",
+     "t": 0.5,
+     "motion": "M04",
+     "dx": 0
+    },
+    {
+     "text": "летом",
+     "role": "EDIT",
+     "size": 84,
+     "color": "cream",
+     "t": 1.3,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -415,32 +408,30 @@
    "motion": "M02"
   },
   {
-   "type": "plaque",
-   "text": "ЧЕМ БОЛЬШЕ",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1128,
-   "t0": 5.4,
+   "type": "plaque_stack",
    "t1": 6.75,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ТЕМ ЛУЧШЕ",
-   "role": "WIDE",
-   "size": 90,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1256,
-   "t0": 5.85,
-   "t1": 6.75,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ЧЕМ БОЛЬШЕ",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 5.4,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "ТЕМ ЛУЧШЕ",
+     "role": "WIDE",
+     "size": 90,
+     "color": "blush",
+     "t": 5.85,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -502,46 +493,47 @@
    "motion": "M02"
   },
   {
-   "type": "plaque",
-   "text": "НЕ ОТ КОЛИЧЕСТВА",
-   "role": "COND",
-   "size": 86,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1119,
-   "t0": 11.6,
+   "type": "plaque_stack",
    "t1": 13.2,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ЧАСОВ",
-   "role": "WIDE",
-   "size": 110,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1254,
-   "t0": 12.1,
-   "t1": 13.2,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "А ОТ КАЧЕСТВА",
-   "role": "WIDE",
-   "size": 76,
-   "fill": "vanilla",
-   "color": "ink",
-   "cx": 540,
    "cy": 1190,
-   "t0": 13.25,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "НЕ ОТ КОЛИЧЕСТВА",
+     "role": "COND",
+     "size": 86,
+     "color": "cream",
+     "t": 11.6,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "ЧАСОВ",
+     "role": "WIDE",
+     "size": 110,
+     "color": "blush",
+     "t": 12.1,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
+  },
+  {
+   "type": "plaque_stack",
    "t1": 14.2,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "А ОТ КАЧЕСТВА",
+     "role": "WIDE",
+     "size": 76,
+     "color": "vanilla",
+     "t": 13.25,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -614,32 +606,30 @@
    "t1": 99
   },
   {
-   "type": "plaque",
-   "text": "ЕГЭ ТРЕНАЖЁР",
-   "role": "WIDE",
-   "size": 82,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1130,
-   "t0": 19.0,
+   "type": "plaque_stack",
    "t1": 21.7,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "больше пользы",
-   "role": "EDIT",
-   "size": 84,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1260,
-   "t0": 20.0,
-   "t1": 21.7,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ЕГЭ ТРЕНАЖЁР",
+     "role": "WIDE",
+     "size": 82,
+     "color": "blush",
+     "t": 19.0,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "больше пользы",
+     "role": "EDIT",
+     "size": 84,
+     "color": "cream",
+     "t": 20.0,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -699,74 +689,65 @@
    "motion": "M02"
   },
   {
-   "type": "plaque",
-   "text": "КОРОТКИЕ ЗАНЯТИЯ",
-   "role": "COND",
-   "size": 84,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1074,
-   "t0": 26.25,
+   "type": "plaque_stack",
    "t1": 28.6,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "КОРОТКИЕ ЗАНЯТИЯ",
+     "role": "COND",
+     "size": 84,
+     "color": "cream",
+     "t": 26.25,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "СТАБИЛЬНО И",
+     "role": "WIDE",
+     "size": 76,
+     "color": "vanilla",
+     "t": 27.0,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "РЕГУЛЯРНО",
+     "role": "WIDE",
+     "size": 76,
+     "color": "vanilla",
+     "t": 27.7,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "СТАБИЛЬНО И",
-   "role": "WIDE",
-   "size": 76,
-   "fill": "vanilla",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1196,
-   "t0": 27.0,
-   "t1": 28.6,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "РЕГУЛЯРНО",
-   "role": "WIDE",
-   "size": 76,
-   "fill": "vanilla",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1312,
-   "t0": 27.7,
-   "t1": 28.6,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ЭТО ДВИГАЕТ",
-   "role": "COND",
-   "size": 88,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1113,
-   "t0": 28.7,
+   "type": "plaque_stack",
    "t1": 30.4,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "БАЛЛ ВПЕРЁД",
-   "role": "WIDE",
-   "size": 84,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1262,
-   "t0": 29.2,
-   "t1": 30.4,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ЭТО ДВИГАЕТ",
+     "role": "COND",
+     "size": 88,
+     "color": "cream",
+     "t": 28.7,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "БАЛЛ ВПЕРЁД",
+     "role": "WIDE",
+     "size": 84,
+     "color": "blush",
+     "t": 29.2,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -830,88 +811,82 @@
    "motion": "M02"
   },
   {
-   "type": "plaque",
-   "text": "НЕ ЗАГОНЯТЬ",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1119,
-   "t0": 34.3,
+   "type": "plaque_stack",
    "t1": 36.7,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "НЕ ЗАГОНЯТЬ",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 34.3,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "СЕБЯ",
+     "role": "WIDE",
+     "size": 110,
+     "color": "blush",
+     "t": 34.8,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "СЕБЯ",
-   "role": "WIDE",
-   "size": 110,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1256,
-   "t0": 34.8,
-   "t1": 36.7,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "НЕ УЧИТЬ ПО",
-   "role": "COND",
-   "size": 88,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1127,
-   "t0": 36.8,
+   "type": "plaque_stack",
    "t1": 37.95,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "НЕ УЧИТЬ ПО",
+     "role": "COND",
+     "size": 88,
+     "color": "cream",
+     "t": 36.8,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "3–4 ЧАСА",
+     "role": "WIDE",
+     "size": 90,
+     "color": "vanilla",
+     "t": 37.15,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "3–4 ЧАСА",
-   "role": "WIDE",
-   "size": 90,
-   "fill": "vanilla",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1261,
-   "t0": 37.15,
-   "t1": 37.95,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ССЫЛКА",
-   "role": "WIDE",
-   "size": 110,
-   "fill": "vanilla",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1117,
-   "t0": 38.05,
+   "type": "plaque_stack",
    "t1": 99,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "в шапке профиля",
-   "role": "EDIT",
-   "size": 88,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1261,
-   "t0": 38.6,
-   "t1": 99,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ССЫЛКА",
+     "role": "WIDE",
+     "size": 110,
+     "color": "vanilla",
+     "t": 38.05,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "в шапке профиля",
+     "role": "EDIT",
+     "size": 88,
+     "color": "cream",
+     "t": 38.6,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "arrow",

@@ -292,88 +292,74 @@
  },
  "events": [
   {
-   "type": "plaque",
-   "text": "НИШЕВЫЕ",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1072,
-   "t0": 0.05,
+   "type": "plaque_stack",
    "t1": 2.8,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "НИШЕВЫЕ",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 0.05,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "СПЕЦИАЛЬНОСТИ",
+     "role": "WIDE",
+     "size": 72,
+     "color": "blush",
+     "t": 0.5,
+     "motion": "M04",
+     "dx": 0
+    },
+    {
+     "text": "химия и биология",
+     "role": "EDIT",
+     "size": 84,
+     "color": "cream",
+     "t": 1.5,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "СПЕЦИАЛЬНОСТИ",
-   "role": "WIDE",
-   "size": 68,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1195,
-   "t0": 0.5,
-   "t1": 2.8,
-   "motion": "M04",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "химия и биология",
-   "role": "EDIT",
-   "size": 84,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1314,
-   "t0": 1.5,
-   "t1": 2.8,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "если не хотите быть",
-   "role": "EDIT",
-   "size": 84,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1067,
-   "t0": 3.2,
+   "type": "plaque_stack",
    "t1": 5.4,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ПРОСТО ВРАЧОМ",
-   "role": "WIDE",
-   "size": 74,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1184,
-   "t0": 3.9,
-   "t1": 5.4,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "это подборка для вас",
-   "role": "EDIT",
-   "size": 76,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1307,
-   "t0": 4.7,
-   "t1": 5.4,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "если не хотите быть",
+     "role": "EDIT",
+     "size": 84,
+     "color": "cream",
+     "t": 3.2,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "ПРОСТО ВРАЧОМ",
+     "role": "WIDE",
+     "size": 76,
+     "color": "blush",
+     "t": 3.9,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "это подборка для вас",
+     "role": "EDIT",
+     "size": 76,
+     "color": "cream",
+     "t": 4.7,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -425,32 +411,30 @@
    "color": "plum"
   },
   {
-   "type": "plaque",
-   "text": "ХИМИЯ СОСТАВА",
-   "role": "COND",
-   "size": 88,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1134,
-   "t0": 9.2,
+   "type": "plaque_stack",
    "t1": 11.8,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "БИОЛОГИЯ КОЖИ",
-   "role": "WIDE",
-   "size": 72,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1254,
-   "t0": 10.2,
-   "t1": 11.8,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ХИМИЯ СОСТАВА",
+     "role": "COND",
+     "size": 88,
+     "color": "cream",
+     "t": 9.2,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "БИОЛОГИЯ КОЖИ",
+     "role": "WIDE",
+     "size": 76,
+     "color": "blush",
+     "t": 10.2,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -501,60 +485,56 @@
    "motion": "M02"
   },
   {
-   "type": "plaque",
-   "text": "СДАВАТЬ ХИМИЮ",
-   "role": "COND",
-   "size": 88,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1128,
-   "t0": 15.85,
+   "type": "plaque_stack",
    "t1": 17.55,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "СДАВАТЬ ХИМИЮ",
+     "role": "COND",
+     "size": 88,
+     "color": "cream",
+     "t": 15.85,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "И БИОЛОГИЮ",
+     "role": "WIDE",
+     "size": 84,
+     "color": "blush",
+     "t": 16.35,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "И БИОЛОГИЮ",
-   "role": "WIDE",
-   "size": 84,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1261,
-   "t0": 16.35,
-   "t1": 17.55,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ХОРОШИЕ",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1122,
-   "t0": 17.9,
+   "type": "plaque_stack",
    "t1": 19.4,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "НОВОСТИ",
-   "role": "WIDE",
-   "size": 100,
-   "fill": "vanilla",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1256,
-   "t0": 18.25,
-   "t1": 19.4,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ХОРОШИЕ",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 17.9,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "НОВОСТИ",
+     "role": "WIDE",
+     "size": 100,
+     "color": "vanilla",
+     "t": 18.25,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "app_icon",
@@ -575,32 +555,30 @@
    "out": 0.0
   },
   {
-   "type": "plaque",
-   "text": "СТОИТ",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1106,
-   "t0": 20.0,
+   "type": "plaque_stack",
    "t1": 21.7,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "0 РУБЛЕЙ",
-   "role": "WIDE",
-   "size": 112,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1256,
-   "t0": 20.35,
-   "t1": 21.7,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "СТОИТ",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 20.0,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "0 РУБЛЕЙ",
+     "role": "WIDE",
+     "size": 112,
+     "color": "blush",
+     "t": 20.35,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -683,32 +661,30 @@
    "color": "plum"
   },
   {
-   "type": "plaque",
-   "text": "ССЫЛКА",
-   "role": "WIDE",
-   "size": 110,
-   "fill": "vanilla",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1117,
-   "t0": 27.2,
+   "type": "plaque_stack",
    "t1": 28.9,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "в шапке профиля",
-   "role": "EDIT",
-   "size": 88,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1261,
-   "t0": 27.75,
-   "t1": 28.9,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ССЫЛКА",
+     "role": "WIDE",
+     "size": 110,
+     "color": "vanilla",
+     "t": 27.2,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "в шапке профиля",
+     "role": "EDIT",
+     "size": 88,
+     "color": "cream",
+     "t": 27.75,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "arrow",
@@ -792,102 +768,91 @@
    "color": "plum"
   },
   {
-   "type": "plaque",
-   "text": "ЭКОЛОГИЧЕСКАЯ",
-   "role": "WIDE",
-   "size": 72,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1122,
-   "t0": 32.9,
+   "type": "plaque_stack",
    "t1": 34.2,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ЭКОЛОГИЧЕСКАЯ",
+     "role": "WIDE",
+     "size": 76,
+     "color": "blush",
+     "t": 32.9,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "БИОХИМИЯ",
+     "role": "WIDE",
+     "size": 100,
+     "color": "vanilla",
+     "t": 33.3,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "БИОХИМИЯ",
-   "role": "WIDE",
-   "size": 100,
-   "fill": "vanilla",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1246,
-   "t0": 33.3,
-   "t1": 34.2,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ЗАГРЯЗНЕНИЯ",
-   "role": "WIDE",
-   "size": 88,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1134,
-   "t0": 35.1,
+   "type": "plaque_stack",
    "t1": 36.95,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ЗАГРЯЗНЕНИЯ",
+     "role": "WIDE",
+     "size": 90,
+     "color": "blush",
+     "t": 35.1,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "влияют на живые организмы",
+     "role": "EDIT",
+     "size": 76,
+     "color": "cream",
+     "t": 35.9,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "влияют на живые организмы",
-   "role": "EDIT",
-   "size": 74,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1252,
-   "t0": 35.9,
-   "t1": 36.95,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ПИШИТЕ",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1079,
-   "t0": 37.2,
+   "type": "plaque_stack",
    "t1": 99,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "В КОММЕНТАРИИ",
-   "role": "WIDE",
-   "size": 72,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1200,
-   "t0": 37.6,
-   "t1": 99,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "какое направление понравилось",
-   "role": "EDIT",
-   "size": 70,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1312,
-   "t0": 38.5,
-   "t1": 99,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ПИШИТЕ",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 37.2,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "В КОММЕНТАРИИ",
+     "role": "WIDE",
+     "size": 76,
+     "color": "blush",
+     "t": 37.6,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "какое направление понравилось",
+     "role": "EDIT",
+     "size": 70,
+     "color": "cream",
+     "t": 38.5,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   }
  ]
 }

@@ -330,60 +330,56 @@
  },
  "events": [
   {
-   "type": "plaque",
-   "text": "ЕГЭ НА",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1124,
-   "t0": 0.05,
+   "type": "plaque_stack",
    "t1": 1.8,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ЕГЭ НА",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 0.05,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "280 БАЛЛОВ",
+     "role": "WIDE",
+     "size": 100,
+     "color": "blush",
+     "t": 0.35,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "280 БАЛЛОВ",
-   "role": "WIDE",
-   "size": 98,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1256,
-   "t0": 0.35,
-   "t1": 1.8,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ПРОБНИКИ",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1114,
-   "t0": 1.9,
+   "type": "plaque_stack",
    "t1": 4.15,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "НА 90+",
-   "role": "WIDE",
-   "size": 120,
-   "fill": "vanilla",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1256,
-   "t0": 2.3,
-   "t1": 4.15,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ПРОБНИКИ",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 1.9,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "НА 90+",
+     "role": "WIDE",
+     "size": 120,
+     "color": "vanilla",
+     "t": 2.3,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -435,60 +431,56 @@
    "color": "plum"
   },
   {
-   "type": "plaque",
-   "text": "ДЕЛО НЕ В",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1141,
-   "t0": 7.3,
+   "type": "plaque_stack",
    "t1": 9.95,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ДЕЛО НЕ В",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 7.3,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "ПРЕДРАСПОЛОЖЕННОСТИ",
+     "role": "WIDE",
+     "size": 50,
+     "color": "blush",
+     "t": 7.8,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "ПРЕДРАСПОЛОЖЕННОСТИ",
-   "role": "WIDE",
-   "size": 46,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1262,
-   "t0": 7.8,
-   "t1": 9.95,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "БЫЛИ ТЕМЫ",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1140,
-   "t0": 10.05,
+   "type": "plaque_stack",
    "t1": 12.9,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ОТКРОВЕННО ТЯЖЕЛО",
-   "role": "WIDE",
-   "size": 56,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1254,
-   "t0": 10.8,
-   "t1": 12.9,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "БЫЛИ ТЕМЫ",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 10.05,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "ОТКРОВЕННО ТЯЖЕЛО",
+     "role": "WIDE",
+     "size": 58,
+     "color": "blush",
+     "t": 10.8,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -527,46 +519,39 @@
    "motion": "M02"
   },
   {
-   "type": "plaque",
-   "text": "НА РАННИХ ПРОБНИКАХ",
-   "role": "COND",
-   "size": 84,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1071,
-   "t0": 15.85,
+   "type": "plaque_stack",
    "t1": 18.2,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ПЕРЕСТАЛА",
-   "role": "WIDE",
-   "size": 80,
-   "fill": "vanilla",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1194,
-   "t0": 16.5,
-   "t1": 18.2,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "БОЯТЬСЯ",
-   "role": "WIDE",
-   "size": 80,
-   "fill": "vanilla",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1313,
-   "t0": 17.2,
-   "t1": 18.2,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "НА РАННИХ ПРОБНИКАХ",
+     "role": "COND",
+     "size": 84,
+     "color": "cream",
+     "t": 15.85,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "ПЕРЕСТАЛА",
+     "role": "WIDE",
+     "size": 80,
+     "color": "vanilla",
+     "t": 16.5,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "БОЯТЬСЯ",
+     "role": "WIDE",
+     "size": 80,
+     "color": "vanilla",
+     "t": 17.2,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -631,32 +616,30 @@
    "color": "plum"
   },
   {
-   "type": "plaque",
-   "text": "НЕ СДАВАЙСЯ",
-   "role": "WIDE",
-   "size": 88,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1118,
-   "t0": 22.5,
+   "type": "plaque_stack",
    "t1": 24.15,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "продолжай подготовку",
-   "role": "EDIT",
-   "size": 84,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1268,
-   "t0": 23.2,
-   "t1": 24.15,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "НЕ СДАВАЙСЯ",
+     "role": "WIDE",
+     "size": 90,
+     "color": "blush",
+     "t": 22.5,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "продолжай подготовку",
+     "role": "EDIT",
+     "size": 84,
+     "color": "cream",
+     "t": 23.2,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -703,32 +686,30 @@
    "t1": 99
   },
   {
-   "type": "plaque",
-   "text": "ПРИЛОЖЕНИЕ",
-   "role": "WIDE",
-   "size": 76,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1130,
-   "t0": 27.9,
+   "type": "plaque_stack",
    "t1": 29.6,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "которое я советую",
-   "role": "EDIT",
-   "size": 84,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1248,
-   "t0": 28.5,
-   "t1": 29.6,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ПРИЛОЖЕНИЕ",
+     "role": "WIDE",
+     "size": 76,
+     "color": "blush",
+     "t": 27.9,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "которое я советую",
+     "role": "EDIT",
+     "size": 84,
+     "color": "cream",
+     "t": 28.5,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -812,32 +793,30 @@
    "motion": "M02"
   },
   {
-   "type": "plaque",
-   "text": "ОДИН ИЗ САМЫХ",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1136,
-   "t0": 33.35,
+   "type": "plaque_stack",
    "t1": 36.5,
-   "motion": "M01",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "УДОБНЫХ ФОРМАТОВ",
-   "role": "WIDE",
-   "size": 56,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1262,
-   "t0": 33.9,
-   "t1": 36.5,
-   "motion": "M02",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ОДИН ИЗ САМЫХ",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 33.35,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "УДОБНЫХ ФОРМАТОВ",
+     "role": "WIDE",
+     "size": 60,
+     "color": "blush",
+     "t": 33.9,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "slide",
@@ -911,60 +890,56 @@
    "color": "plum"
   },
   {
-   "type": "plaque",
-   "text": "ЧТО ДЕЛАТЬ",
-   "role": "COND",
-   "size": 90,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1138,
-   "t0": 40.25,
+   "type": "plaque_stack",
    "t1": 41.85,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ЧТО ДЕЛАТЬ",
+     "role": "COND",
+     "size": 90,
+     "color": "cream",
+     "t": 40.25,
+     "motion": "M01",
+     "dx": 0
+    },
+    {
+     "text": "ЧТОБЫ ИСПРАВИТЬ",
+     "role": "WIDE",
+     "size": 62,
+     "color": "blush",
+     "t": 40.75,
+     "motion": "M02",
+     "dx": 0
+    }
+   ]
   },
   {
-   "type": "plaque",
-   "text": "ЧТОБЫ ИСПРАВИТЬ",
-   "role": "WIDE",
-   "size": 62,
-   "fill": "blush",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1262,
-   "t0": 40.75,
-   "t1": 41.85,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "ССЫЛКА",
-   "role": "WIDE",
-   "size": 110,
-   "fill": "vanilla",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1117,
-   "t0": 41.9,
+   "type": "plaque_stack",
    "t1": 99,
-   "motion": "M02",
-   "out": 0.12
-  },
-  {
-   "type": "plaque",
-   "text": "в шапке профиля",
-   "role": "EDIT",
-   "size": 88,
-   "fill": "milk",
-   "color": "ink",
-   "cx": 540,
-   "cy": 1261,
-   "t0": 42.4,
-   "t1": 99,
-   "motion": "M01",
-   "out": 0.12
+   "cy": 1190,
+   "out": 0.12,
+   "parts": [
+    {
+     "text": "ССЫЛКА",
+     "role": "WIDE",
+     "size": 110,
+     "color": "vanilla",
+     "t": 41.9,
+     "motion": "M02",
+     "dx": 0
+    },
+    {
+     "text": "в шапке профиля",
+     "role": "EDIT",
+     "size": 88,
+     "color": "cream",
+     "t": 42.4,
+     "motion": "M01",
+     "dx": 0
+    }
+   ]
   },
   {
    "type": "arrow",
