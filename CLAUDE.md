@@ -1,7 +1,7 @@
 # Студия монтажа
 
 Репозиторий — конвейер монтажа вертикальных роликов. **Любой монтаж делается только скиллом `montage`**
-(`.claude/skills/montage/SKILL.md`): по плейбуку `montage/PLAYBOOK.md` и обязательным правилам автора в скилле.
+(`.claude/skills/montage/SKILL.md`): по мастер-промпту стиля `montage/STYLE.md`, плейбуку `montage/PLAYBOOK.md` и обязательным правилам автора в скилле (приоритет: правила скилла → STYLE.md → PLAYBOOK.md).
 Ролик `projects/1910/` — эталон: так должен выглядеть каждый монтаж.
 
 - Движок: `montage/engine.py`, формат партитуры: `montage/EDIT_FORMAT.md`.
