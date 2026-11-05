@@ -692,6 +692,8 @@ BUILDERS = {
 def build(spec):
     global _DYN
     _DYN = spec.get("style") == "dynamic"
+    if _DYN:      # правка автора: жёлтого в динамичном стиле нет нигде (субтитры, заголовки, плашки, фоны слайдов)
+        PAL["yellow"] = PAL["white"]; PAL["hand"] = PAL["white"]; PAL["vanilla"] = PAL["pink"]
     els, slides = [], []
     for ev in spec["events"]:
         if ev["type"] == "slide":
