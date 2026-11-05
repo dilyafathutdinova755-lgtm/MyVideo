@@ -29,7 +29,12 @@ PAL = {
     "cream": (0xFF, 0xF8, 0xF1), "vanilla": (0xF4, 0xE7, 0xA8), "blush": (0xEF, 0xC6, 0xD8),
     "lavender": (0xD8, 0xCC, 0xF0), "sky": (0xC5, 0xE3, 0xF0), "mint": (0xC9, 0xE2, 0xD2),
     "peach": (0xF1, 0xCF, 0xB7), "plum": (0x62, 0x4B, 0x69), "scrim": (0x24, 0x21, 0x2B),
+    # динамичный стиль (STYLE.md §3.2)
+    "white": (0xFF, 0xFF, 0xFF), "yellow": (0xFF, 0xE5, 0x00), "red": (0xD9, 0x00, 0x25), "crimson": (0xB8, 0x00, 0x49),
+    "pink": (0xF1, 0xBC, 0xE5), "hand": (0xFF, 0xF2, 0xA8), "black": (0x10, 0x10, 0x10), "blue": (0x08, 0x72, 0xAA),
+    "paper": (0xF4, 0xF2, 0xEF), "dot": (0xD6, 0xD3, 0xCF),
 }
+_DYN = False       # spec["style"] == "dynamic": жирные белые субтитры + жёлтые акценты, точки на слайдах, густой градиент
 def C(name): return PAL[name] if isinstance(name, str) else tuple(name)
 
 # ---------- шрифтовые роли (§4.1) ----------
@@ -107,6 +112,19 @@ class Face:
         for x in b:                                               # пропуски — держим соседнее положение
             last = x or last; self.boxes.append(last)
         self.zk, self.anchor = zk, anchor
+        self._despike()
+    def _despike(self, win=6):
+        """Детектор иногда принимает ладонь за лицо: бокс, резко выбивающийся из соседей (±1.2 с), заменяется медианой соседей."""
+        b, n = self.boxes, len(self.boxes)
+        for i in range(n):
+            if not b[i]: continue
+            nb = [x for x in b[max(0, i - win):i + win + 1] if x]
+            if len(nb) < 5: continue
+            med = [float(np.median([x[k] for x in nb])) for k in range(4)]
+            cx, cy = b[i][0] + b[i][2] / 2, b[i][1] + b[i][3] / 2
+            mx, my = med[0] + med[2] / 2, med[1] + med[3] / 2
+            if abs(cx - mx) > 0.5 * med[2] or abs(cy - my) > 0.5 * med[3] or b[i][2] > 1.5 * med[2] or b[i][3] > 1.5 * med[3]:
+                b[i] = med
     def _z(self, box, t):
         if not box: return None
         s = zoom_at(self.zk, t) if self.zk else 1.0
@@ -531,6 +549,12 @@ class Slide(El):
         m = np.exp(-(((xx - bx) / 520) ** 2 + ((yy - by) / 470) ** 2) * 1.6) * ev.get("blob_strength", 0.85)
         rgb = bg * (1 - m[..., None]) + blob * m[..., None]
         rgb += np.random.default_rng(3).uniform(-1.5, 1.5, rgb.shape).astype(np.float32)   # дизеринг против колец
+        if ev.get("dots"):                         # STYLE.md §8.1: мелкая регулярная сетка серых точек
+            m2 = Image.new("L", (W, H), 0); dd = ImageDraw.Draw(m2); gap = ev.get("dot_gap", 34)
+            for yy_ in range(gap // 2, H, gap):
+                for xx_ in range(gap // 2, W, gap): dd.ellipse((xx_ - 2, yy_ - 2, xx_ + 2, yy_ + 2), fill=255)
+            k = (np.asarray(m2, np.float32) / 255 * ev.get("dot_strength", 0.55))[..., None]
+            rgb = rgb * (1 - k) + np.array(C(ev.get("dot_color", "dot")), np.float32) * k
         self.bg = Image.fromarray(np.clip(rgb + 0.5, 0, 255).astype(np.uint8), "RGB").convert("RGBA")
         self.t_in, self.t_out = 0.34, 0.20
         self.subs = ev.get("subs", "show")
@@ -570,13 +594,14 @@ def subtitle_groups(spec):
     for g in spec["subtitles"]["groups"]:
         n = len(g.split()); seg = words[i:i + n]; i += n
         got = " ".join(w for w, _, _ in seg)
-        if got.lower().replace("ё", "е") != g.lower().replace("ё", "е"):
+        if got.lower().replace("ё", "е") != g.replace("*", "").lower().replace("ё", "е"):
             raise ValueError(f"группа «{g}» не совпадает с расшифровкой: «{got}»")
-        groups.append([g, seg[0][1], seg[-1][2]])
+        groups.append([g, seg[0][1], seg[-1][2], seg])
     if i != len(words):
         raise ValueError(f"субтитры покрывают {i} слов из {len(words)}")
     for k in range(len(groups) - 1): groups[k][2] = groups[k + 1][1]
     groups[0][1] = 0.0; groups[-1][2] = spec["duration"]
+    if groups: groups[0][3][0][1] = 0.0
     return groups
 
 class Subtitle(El):
@@ -596,6 +621,59 @@ class Subtitle(El):
         return st
 
 
+class DynSubtitle:
+    """Динамичный субтитр (STYLE.md §3, §5C): слова набираются по мере произнесения, предыдущие остаются;
+    *слово* в группе — жёлтый акцент (на слайде — красный). Раскладка не прыгает: считается по полной строке."""
+    def __init__(self, text, words, t1, base, slides):
+        plain = text.replace("*", "")
+        ws = [w.strip("*") for w in text.split()]; acc = ["*" in w for w in text.split()]
+        size = 56
+        while True:
+            f = font("WIDE", size)
+            if f.getlength(plain) + 80 <= W - 2 * SIDE - 10 or size <= 40: break
+            size -= 2
+        if f.getlength(plain) + 80 > W - 2 * SIDE: raise ValueError(f"субтитр «{plain}» шире кадра — разбить группу")
+        space = f.getlength(" ")
+        xs, x = [], 0.0
+        for w in ws: xs.append(x); x += f.getlength(w) + space
+        total = x - space
+        l, t, r, b = f.getbbox(plain, anchor="ls"); pad = 40
+        wpx, hpx = int(total + 2 * pad), int(b - t + 2 * pad); oy = pad - t
+        def make(k, dark):
+            img = Image.new("RGBA", (wpx, hpx), (0, 0, 0, 0))
+            if not dark:
+                m = Image.new("L", (wpx, hpx), 0); dm = ImageDraw.Draw(m)
+                for i in range(k): dm.text((pad + xs[i], oy), ws[i], font=f, fill=255, anchor="ls")
+                sh = m.filter(ImageFilter.GaussianBlur(10)).point(lambda v: min(255, int(v * 1.1)))
+                img.paste(Image.new("RGBA", (wpx, hpx), PAL["scrim"] + (255,)), (0, 4), sh)
+            d = ImageDraw.Draw(img)
+            for i in range(k):
+                col = (PAL["red"] if acc[i] else PAL["black"]) if dark else (PAL["yellow"] if acc[i] else PAL["white"])
+                d.text((pad + xs[i], oy), ws[i], font=f, fill=col + (255,), anchor="ls")
+            return img
+        self.els = []
+        starts = [w[1] for w in words] + [t1]
+        for k in range(len(ws)):
+            lt, dk = make(k + 1, False), make(k + 1, True)
+            e = _DynSubEl(lt, dk, W / 2, base - oy + hpx / 2, starts[k], starts[k + 1], "SUB" if k == 0 else "FADE_FAST", base, slides)
+            self.els.append(e)
+        self.t0, self.t1, self.text = starts[0], t1, plain
+
+class _DynSubEl(El):
+    def __init__(self, light, dark, cx, cy, t0, t1, motion, base, slides):
+        super().__init__(light, cx, cy, t0, t1, "SUB" if motion == "SUB" else "none", z=Z_SUBS, out=0.0)
+        self.light, self.dark, self.base, self.slides, self.fast = light, dark, base, slides, motion == "FADE_FAST"
+    def state(self, t):
+        st = super().state(t)
+        if st is None: return None
+        on = any(s.cover(t, self.base) > 0.5 for s in self.slides)
+        self.img = self.dark if on else self.light
+        s_, a, dx, dy, rot = st
+        if self.fast:                      # новое слово: быстрый scale-in 0.9 → 1.0, 0.14 с (STYLE.md §5A)
+            p = out_cubic((t - self.t0) / 0.14); s_ = 0.9 + 0.1 * p; a = clamp((t - self.t0) / 0.08)
+            return 1.0, 1.0, 0.0, 0.0, 0.0
+        return st
+
 # ===================== ЗУМ =====================
 def zoom_at(keys, t):
     for (ta, sa, _), (tb, sb, mode) in zip(keys, keys[1:]):
@@ -614,7 +692,8 @@ def zoom_frame(src, keys, anchor, t):
 def bottom_scrim():
     """Вертикальный градиент под текстом (§3.3): 0 до y=650, ~0.12 у 1050, ~0.32 у 1450, ~0.50 внизу."""
     ys = np.arange(H, dtype=np.float32)
-    a = np.interp(ys, [0, 650, 1050, 1450, 1920], [0, 0, 0.12, 0.32, 0.50])
+    pts = ([0, 1000, 1200, 1500, 1920], [0, 0, 0.3, 0.55, 0.7]) if _DYN else ([0, 650, 1050, 1450, 1920], [0, 0, 0.12, 0.32, 0.50])
+    a = np.interp(ys, *pts)
     out = Image.new("RGBA", (W, H), PAL["scrim"] + (255,))
     out.putalpha(Image.fromarray((np.repeat(a[:, None], W, 1) * 255).astype(np.uint8), "L"))
     return out
@@ -638,6 +717,8 @@ BUILDERS = {
 }
 
 def build(spec):
+    global _DYN
+    _DYN = spec.get("style") == "dynamic"
     els, slides = [], []
     for ev in spec["events"]:
         if ev["type"] == "slide":
@@ -650,12 +731,14 @@ def build(spec):
     over = spec["subtitles"].get("overrides", [])      # [[t0, t1, baseline]] — поднять субтитры над демонстрируемым предметом
     hide = [(s.t0, s.t1) for s in slides if s.subs == "hide"]
     subs = []
-    for g, a, b in subtitle_groups(spec):
+    for g, a, b, seg in subtitle_groups(spec):
         if any(h0 <= (a + b) / 2 < h1 for h0, h1 in hide): continue
         bl = next((o[2] for o in over if o[0] <= (a + b) / 2 < o[1]), base)
         if bl is None: continue            # null в overrides = на это время субтитры скрыты
-        subs.append(Subtitle(g, a, b, bl, slides))
-    els += subs
+        if _DYN:
+            d = DynSubtitle(g, seg, b, bl, slides); els += d.els; subs.append(d)
+        else:
+            subs.append(Subtitle(g, a, b, bl, slides)); els.append(subs[-1])
     els.sort(key=lambda e: e.z)
     return els, subs
 
