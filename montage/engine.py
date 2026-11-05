@@ -622,56 +622,29 @@ class Subtitle(El):
 
 
 class DynSubtitle:
-    """Динамичный субтитр (STYLE.md §3, §5C): слова набираются по мере произнесения, предыдущие остаются;
-    *слово* в группе — жёлтый акцент (на слайде — красный). Раскладка не прыгает: считается по полной строке."""
+    """Штатные субтитры динамичного стиля (STYLE.md §3): мелкие, по одному слову, идут без перерывов весь ролик.
+    Слово держится до начала следующего; цвет белый (на слайде тёмный), жёлтого нет. Маркеры *…* в группах игнорируются."""
     def __init__(self, text, words, t1, base, slides):
-        plain = text.replace("*", "")
-        ws = [w.strip("*") for w in text.split()]; acc = ["*" in w for w in text.split()]
-        size = 56
-        while True:
-            f = font("WIDE", size)
-            if f.getlength(plain) + 80 <= W - 2 * SIDE - 10 or size <= 40: break
-            size -= 2
-        if f.getlength(plain) + 80 > W - 2 * SIDE: raise ValueError(f"субтитр «{plain}» шире кадра — разбить группу")
-        space = f.getlength(" ")
-        xs, x = [], 0.0
-        for w in ws: xs.append(x); x += f.getlength(w) + space
-        total = x - space
-        l, t, r, b = f.getbbox(plain, anchor="ls"); pad = 40
-        wpx, hpx = int(total + 2 * pad), int(b - t + 2 * pad); oy = pad - t
-        def make(k, dark):
-            img = Image.new("RGBA", (wpx, hpx), (0, 0, 0, 0))
-            if not dark:
-                m = Image.new("L", (wpx, hpx), 0); dm = ImageDraw.Draw(m)
-                for i in range(k): dm.text((pad + xs[i], oy), ws[i], font=f, fill=255, anchor="ls")
-                sh = m.filter(ImageFilter.GaussianBlur(10)).point(lambda v: min(255, int(v * 1.1)))
-                img.paste(Image.new("RGBA", (wpx, hpx), PAL["scrim"] + (255,)), (0, 4), sh)
-            d = ImageDraw.Draw(img)
-            for i in range(k):
-                col = (PAL["red"] if acc[i] else PAL["black"]) if dark else (PAL["yellow"] if acc[i] else PAL["white"])
-                d.text((pad + xs[i], oy), ws[i], font=f, fill=col + (255,), anchor="ls")
-            return img
-        self.els = []
+        ws = [w.strip("*") for w in text.split()]
+        f = font("BODY", 54)
         starts = [w[1] for w in words] + [t1]
-        for k in range(len(ws)):
-            lt, dk = make(k + 1, False), make(k + 1, True)
-            e = _DynSubEl(lt, dk, W / 2, base - oy + hpx / 2, starts[k], starts[k + 1], "SUB" if k == 0 else "FADE_FAST", base, slides)
+        self.els = []
+        for k, w in enumerate(ws):
+            lt, (_, oy) = text_img(w, f, PAL["white"], glow=0.75, blur=10, pad=40)
+            dk, _ = text_img(w, f, PAL["ink"], glow=0, pad=40)
+            e = _DynSubEl(lt, dk, W / 2, base - oy + lt.height / 2, starts[k], starts[k + 1], "none", base, slides)
             self.els.append(e)
-        self.t0, self.t1, self.text = starts[0], t1, plain
+        self.t0, self.t1, self.text = starts[0], t1, " ".join(ws)
 
 class _DynSubEl(El):
     def __init__(self, light, dark, cx, cy, t0, t1, motion, base, slides):
-        super().__init__(light, cx, cy, t0, t1, "SUB" if motion == "SUB" else "none", z=Z_SUBS, out=0.0)
-        self.light, self.dark, self.base, self.slides, self.fast = light, dark, base, slides, motion == "FADE_FAST"
+        super().__init__(light, cx, cy, t0, t1, motion, z=Z_SUBS, out=0.0)
+        self.light, self.dark, self.base, self.slides = light, dark, base, slides
     def state(self, t):
         st = super().state(t)
         if st is None: return None
         on = any(s.cover(t, self.base) > 0.5 for s in self.slides)
         self.img = self.dark if on else self.light
-        s_, a, dx, dy, rot = st
-        if self.fast:                      # новое слово: быстрый scale-in 0.9 → 1.0, 0.14 с (STYLE.md §5A)
-            p = out_cubic((t - self.t0) / 0.14); s_ = 0.9 + 0.1 * p; a = clamp((t - self.t0) / 0.08)
-            return 1.0, 1.0, 0.0, 0.0, 0.0
         return st
 
 # ===================== ЗУМ =====================
@@ -754,6 +727,16 @@ def compose(els, t, base_img, scrim):
     return fr
 
 
+
+MAX_SLIDE_GAP = 10.0     # правило 1 (SKILL.md): полноэкранный слайд минимум раз в 10 с
+
+def slide_gaps(slides, dur):
+    """Участки длиннее MAX_SLIDE_GAP, где нет ни одного слайда (включая начало и конец ролика)."""
+    pts, t = [], 0.0
+    for s in sorted(slides, key=lambda x: x.t0):
+        pts.append((t, s.t0)); t = max(t, s.t1)
+    pts.append((t, dur))
+    return [(a, b) for a, b in pts if b - a > MAX_SLIDE_GAP]
 
 def audit(els, slides, face, dur, step=0.2):
     """Ищет кадры, где графика на видео (не на слайде) заходит на лицо. Возвращает список (t0, t1, что)."""
@@ -843,7 +826,13 @@ def main():
         for t0, t1, k in bad[:30]: print(f"  {t0:5.1f}-{t1:5.1f}с  «{k}»")
     elif _FACE is not None:
         print("аудит лица: чисто")
-    if a.audit: sys.exit(1 if bad else 0)
+    gaps = slide_gaps(slides, dur)
+    if gaps:
+        print(f"МАЛО СЛАЙДОВ (правило 1: слайд минимум раз в {MAX_SLIDE_GAP:.0f} с). Промежутки без слайда:")
+        for g0, g1 in gaps: print(f"  {g0:5.1f}-{g1:5.1f}с ({g1 - g0:.1f}с)")
+    if a.audit: sys.exit(1 if (bad or gaps) else 0)
+    if gaps and a.stills is None:
+        print("рендер остановлен: добавьте слайды в edit.json"); sys.exit(3)
     if bad and not a.force and a.stills is None:
         print("рендер остановлен: поправьте edit.json или запустите с --force"); sys.exit(2)
     scrim = bottom_scrim()
