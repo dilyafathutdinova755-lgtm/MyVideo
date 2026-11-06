@@ -558,9 +558,10 @@ class Slide(El):
         self.bg = Image.fromarray(np.clip(rgb + 0.5, 0, 255).astype(np.uint8), "RGB").convert("RGBA")
         self.t_in, self.t_out = 0.34, 0.20
         self.subs = ev.get("subs", "show")
+        self.keep_white = ev.get("bg") == "red"          # на красном слайде субтитры остаются белыми
     def cover(self, t, y_line):
         """Насколько плоскость закрывает горизонталь y_line в момент t (для цвета субтитров)."""
-        if t < self.t0 or t >= self.t1: return 0.0
+        if t < self.t0 or t >= self.t1 or self.keep_white: return 0.0
         top = H * (1 - out_cubic((t - self.t0) / self.t_in))
         return clamp((self.t1 - t) / self.t_out) if top < y_line - 40 else 0.0
     def state(self, t):
